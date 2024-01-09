@@ -1,7 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:vendass/Home.dart';
+import 'package:vendass/views/Anuncios.dart';
+import 'package:vendass/views/Login.dart';
 import 'package:vendass/firebase_options.dart';
+import 'package:vendass/views/MeusAnuncios.dart';
+import 'package:vendass/views/NovoAnuncio.dart';
+import 'package:vendass/views/RouteGeneration.dart';
+
+final ThemeData temaPadrao = ThemeData(
+  primaryColor: const Color(0xff9c27b0),
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,8 +17,18 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: "Vendass   ",
-    home: Home(),
+    home: Anuncios(),
+    theme: temaPadrao,
+    initialRoute: "/l",
+    routes: {
+      '/l': (context) => Anuncios(),
+      '/login': (context) => Login(), //modificacao
+      '/meus-anuncios': (context) => MeusAnuncios(), //modificacao
+      '/novo-anuncio': (context) => NovoAnuncio(), //modificacao
+    },
+    onGenerateRoute: RouteGeneration.generateRoute,
   ));
 }
