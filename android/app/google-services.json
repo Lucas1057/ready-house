@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1025593670999",
+    "project_id": "vendas-app-99e0b",
+    "storage_bucket": "vendas-app-99e0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025593670999:android:41d6e1b238248da49f5212",
+        "android_client_info": {
+          "package_name": "com.sampaio.vendas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEDK464f6sN0c_vBQXBuMh96sPS6ckXso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025593670999:android:db6a1cc5d290f2429f5212",
+        "android_client_info": {
+          "package_name": "com.sampaio.vendass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEDK464f6sN0c_vBQXBuMh96sPS6ckXso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
