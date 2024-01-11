@@ -22,6 +22,12 @@ class _AnunciosState extends State<Anuncios> {
       case "Deslogar":
         _deslogarUsuario();
         break;
+      case "Foto":
+        Navigator.pushNamed(context, "/foto");
+        break;
+      case "Tela":
+        Navigator.pushNamed(context, "/tela");
+        break;
     }
   }
 
@@ -41,7 +47,7 @@ class _AnunciosState extends State<Anuncios> {
     if (usuarioLogado == null) {
       itensMenu = ["Entrar / Cadastrar"];
     } else {
-      itensMenu = ["Meus anúncios", "Deslogar"];
+      itensMenu = ["Meus anúncios", "Deslogar", "Foto", "Tela"];
     }
   }
 
@@ -57,7 +63,7 @@ class _AnunciosState extends State<Anuncios> {
       appBar: AppBar(
         title: const Text(
           "OLX",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         elevation: 0,
         actions: [

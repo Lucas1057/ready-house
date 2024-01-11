@@ -6,6 +6,8 @@ import 'package:vendass/views/Anuncios.dart';
 import 'package:vendass/views/Login.dart';
 import 'package:vendass/views/MeusAnuncios.dart';
 import 'package:vendass/views/NovoAnuncio.dart';
+import 'package:vendass/views/Foto.dart';
+import 'package:vendass/views/tela_imagem.dart';
 
 class RouteGeneration {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -21,6 +23,10 @@ class RouteGeneration {
         return MaterialPageRoute(builder: (_) => const MeusAnuncios());
       case "/novo-anuncio":
         return MaterialPageRoute(builder: (_) => const NovoAnuncio());
+      /*case "/foto":
+        return MaterialPageRoute(builder: (_) => const Foto());
+      case "/tela":
+        return MaterialPageRoute(builder: (_) => Tela_imagem());*/
 
       default:
         _erroRota();

@@ -13,6 +13,8 @@ class BotaoCustomizado extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: Colors.blue),
+
       //shape:RoudedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       onPressed: this.onPressed,
       child: Text(

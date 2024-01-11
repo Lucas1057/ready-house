@@ -13,7 +13,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final TextEditingController _controllerEmail =
-      TextEditingController(text: "lucas@gmail.com");
+      TextEditingController(text: "exemplo@gmail.com");
   final TextEditingController _controllerSenha =
       TextEditingController(text: "123456");
 
