@@ -29,6 +29,7 @@ class _FotoState extends State<Foto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar( backgroundColor: Colors.blue,),
       body: Center(
         child: Column(
           children: [

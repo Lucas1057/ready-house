@@ -35,6 +35,7 @@ class _Tela_imagemState extends State<Tela_imagem> {
       title: 'Lista de imagens',
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           title: Text('Lista de imagens'),
         ),
         body: Center(

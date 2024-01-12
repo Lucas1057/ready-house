@@ -61,6 +61,7 @@ class _AnunciosState extends State<Anuncios> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: const Text(
           "OLX",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -78,7 +79,6 @@ class _AnunciosState extends State<Anuncios> {
                 }).toList();
               })
         ],
-        backgroundColor: Colors.blue,
       ),
       body: Container(
         width: 400,

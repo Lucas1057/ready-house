@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
@@ -14,33 +13,20 @@ class NovoAnuncio extends StatefulWidget {
 class _NovoAnuncioState extends State<NovoAnuncio> {
   final _formKey = GlobalKey<FormState>();
 
-  //instancia do image piker
-  /*final imagePicker = ImagePicker();
-  File? imageFile;
   //funcao pra add imagem
 
   // ignore: non_constant_identifier_names
-  Pick(ImageSource source) async {
-    //variavel pickerFile
-    final pickedFile = await imagePicker.pickImage(source: source);
-    //verificar se o usuario vai de fato selecionar a imagem
-    if (pickedFile != Null) {
-      setState(() {
-        imageFile = File(pickedFile!.path);
-      });
-    }
-  }*/
+  _selecionarImagemGaleria(ImageSource source) async {
+    // instancia do image piker
+    final imagePicker = ImagePicker();
 
-  _selecionarImagemGaleria() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? _imagemSelecionada = await _picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 600,
-      imageQuality: 0,
-    );
-    if (_imagemSelecionada != null) {
+    //variavel pickerFile
+    final XFile? _imagemSelecionada =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    //verificar se o usuario vai de fato selecionar a imagem
+    if (_imagemSelecionada != Null) {
       setState(() {
-        _listaImagens.add(_imagemSelecionada as File);
+        _listaImagens.add(_imagemSelecionada! as File);
       });
     }
   }
@@ -52,6 +38,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Anuncio'),
+        backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -66,8 +53,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   initialValue: _listaImagens,
                   validator: (imagens) {
                     //imagens.length
-                    if (imagens!.isEmpty) {
-                      return "nacessario selecionar uma imagem!";
+                    if (imagens!.length == 0) {
+                      return "Necessario selecionar uma imagem!";
                     }
                     return null;
                   },
@@ -78,24 +65,25 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                         Container(
                           height: 100,
                           child: ListView.builder(
+                              //construir o listview
                               itemCount: _listaImagens.length + 1, //+1
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, indice) {
                                 //indice = 0 == _listaImagens.length
-                                if (_listaImagens.length > 0) {
+                                if (indice == _listaImagens.length) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        //Pick(ImageSource.gallery);
-                                        _selecionarImagemGaleria();
+                                        _selecionarImagemGaleria(
+                                            ImageSource.gallery);
                                       },
                                       child: CircleAvatar(
                                         backgroundColor: Colors.grey[400],
                                         radius: 50,
-                                        backgroundImage:
-                                            FileImage(_listaImagens[indice]),
+                                        // backgroundImage:
+                                        //  FileImage(_listaImagens[indice]),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -114,12 +102,13 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                     ),
                                   );
                                 }
-                                /*if (_listaImagens.length > 0) {
+                                if (_listaImagens.length > 0) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
                                     child: GestureDetector(
                                       onTap: () {
+                                        /*
                                         showDialog(
                                             context: context,
                                             builder: (context) => Dialog(
@@ -147,6 +136,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                                     ],
                                                   ),
                                                 ));
+                                      */
                                       },
                                       child: CircleAvatar(
                                         radius: 50,
@@ -164,7 +154,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                       ),
                                     ),
                                   );
-                                }*/
+                                }
                                 return Container();
                               }),
                         ),
