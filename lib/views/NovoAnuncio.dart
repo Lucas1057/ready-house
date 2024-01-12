@@ -26,7 +26,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
     //verificar se o usuario vai de fato selecionar a imagem
     if (_imagemSelecionada != Null) {
       setState(() {
-        _listaImagens.add(_imagemSelecionada! as File);
+        _listaImagens = File(_imagemSelecionada!.path) as List<File>;
       });
     }
   }
@@ -140,8 +140,11 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                       },
                                       child: CircleAvatar(
                                         radius: 50,
-                                        backgroundImage:
-                                            FileImage(_listaImagens[indice]),
+                                        // backgroundImage:
+                                        // FileImage(_listaImagens[indice]),
+                                        backgroundImage: _listaImagens != null
+                                            ? FileImage(_listaImagens as File)
+                                            : null,
                                         child: Container(
                                           color: const Color.fromRGBO(
                                               255, 255, 255, 0.4),
