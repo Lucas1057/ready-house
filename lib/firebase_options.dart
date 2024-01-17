@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD_LK0gfwegsqv-yOlISUyiCCta-j72has',
-    appId: '1:1025593670999:web:9f062a4329c9b0299f5212',
-    messagingSenderId: '1025593670999',
-    projectId: 'vendas-app-99e0b',
-    authDomain: 'vendas-app-99e0b.firebaseapp.com',
-    storageBucket: 'vendas-app-99e0b.appspot.com',
-    measurementId: 'G-ZZBB8R9FSN',
+    apiKey: 'AIzaSyBn_-qJ301waeQbF4LXYO_E0BtPrEMlJjg',
+    appId: '1:589182495415:web:b616d415376ef1cd60fb32',
+    messagingSenderId: '589182495415',
+    projectId: 'pech-a7954',
+    authDomain: 'pech-a7954.firebaseapp.com',
+    storageBucket: 'pech-a7954.appspot.com',
+    measurementId: 'G-GFGDC3VJXE',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDEDK464f6sN0c_vBQXBuMh96sPS6ckXso',
-    appId: '1:1025593670999:android:db6a1cc5d290f2429f5212',
-    messagingSenderId: '1025593670999',
-    projectId: 'vendas-app-99e0b',
-    storageBucket: 'vendas-app-99e0b.appspot.com',
+    apiKey: 'AIzaSyBef-XLo9ssfFM_vgZ5lTHPyvwJ_dnRE3M',
+    appId: '1:589182495415:android:7a50cca348100ec660fb32',
+    messagingSenderId: '589182495415',
+    projectId: 'pech-a7954',
+    storageBucket: 'pech-a7954.appspot.com',
   );
 }

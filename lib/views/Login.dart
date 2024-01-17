@@ -15,7 +15,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _controllerEmail =
       TextEditingController(text: "exemplo@gmail.com");
   final TextEditingController _controllerSenha =
-      TextEditingController(text: "123456");
+      TextEditingController(text: "1234567");
 
   bool _cadastrar = false;
   String _mensagemErro = "";
@@ -82,75 +82,80 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          'olx',
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            'olx',
+          ),
         ),
-      ),
-      backgroundColor: Colors.white,
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: Image.asset(
-                "imagens/logo.png",
-                width: 2,
-                height: 150,
+        backgroundColor: Colors.white,
+        body: Container(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: Image.asset(
+                  "imagens/logo.png",
+                  width: 2,
+                  height: 150,
+                ),
               ),
-            ),
-            InputCustomizado(
-              controller: _controllerEmail,
-              hint: "E-mail",
-              autofocus: true,
-              type: TextInputType.emailAddress,
-            ),
-            InputCustomizado(
-              controller: _controllerSenha,
-              hint: "Senha",
-              obscure: true,
-              type: TextInputType.text,
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text('Logar'),
-              Switch(
-                value: _cadastrar,
-                onChanged: (bool valor) {
-                  setState(() {
-                    _cadastrar = valor;
-                    _textBotao = "Entrar";
+              InputCustomizado(
+                controller: _controllerEmail,
+                hint: "E-mail",
+                autofocus: true,
+                type: TextInputType.emailAddress,
+              ),
+              InputCustomizado(
+                controller: _controllerSenha,
+                hint: "Senha",
+                obscure: true,
+                type: TextInputType.text,
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                const Text('Logar'),
+                Switch(
+                  value: _cadastrar,
+                  onChanged: (bool valor) {
+                    setState(() {
+                      _cadastrar = valor;
+                      _textBotao = "Entrar";
 
-                    if (_cadastrar) {
-                      _textBotao = "Cadastrar";
-                    }
-                  });
-                },
-              ),
-              const Text('Cadastrar')
-            ]),
-            BotaoCustomizado(
-                texto: _textBotao,
-                corTexto: Colors.white,
-                onPressed: () {
-                  _validarCampos();
-                }),
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Text(
-                _mensagemErro,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
-              ),
-            )
-          ],
-        )),
-      ),
-    );
+                      if (_cadastrar) {
+                        _textBotao = "Cadastrar";
+                      }
+                    });
+                  },
+                ),
+                const Text('Cadastrar')
+              ]),
+              BotaoCustomizado(
+                  texto: _textBotao,
+                  corTexto: Colors.white,
+                  onPressed: () {
+                    _validarCampos();
+                  }),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  _mensagemErro,
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+              )
+            ],
+          )),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.settings),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, "/apagar");
+          },
+        ));
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
@@ -13,22 +14,22 @@ class NovoAnuncio extends StatefulWidget {
 class _NovoAnuncioState extends State<NovoAnuncio> {
   final _formKey = GlobalKey<FormState>();
 
+  final imagePicker = ImagePicker();
+  late Uint8List imagem = Uint8List(0);
+
   //funcao pra add imagem
 
   // ignore: non_constant_identifier_names
   _selecionarImagemGaleria(ImageSource source) async {
-    // instancia do image piker
-    final imagePicker = ImagePicker();
+    try {
+      final XFile? xfile = await imagePicker.pickImage(source: source);
 
-    //variavel pickerFile
-    final XFile? _imagemSelecionada =
-        await imagePicker.pickImage(source: ImageSource.gallery);
-    //verificar se o usuario vai de fato selecionar a imagem
-    if (_imagemSelecionada != Null) {
+      File imageN = File(xfile!.path);
+
       setState(() {
-        _listaImagens = File(_imagemSelecionada!.path) as List<File>;
+        imagem = imageN.readAsBytesSync();
       });
-    }
+    } catch (e) {}
   }
 
   // ignore: unused_field, prefer_final_fields
@@ -142,8 +143,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                         radius: 50,
                                         // backgroundImage:
                                         // FileImage(_listaImagens[indice]),
-                                        backgroundImage: _listaImagens != null
-                                            ? FileImage(_listaImagens as File)
+                                        backgroundImage: imagem.isNotEmpty
+                                            ? Image.memory(imagem).image
                                             : null,
                                         child: Container(
                                           color: const Color.fromRGBO(
