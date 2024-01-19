@@ -42,6 +42,7 @@ class _AnunciosState extends State<Anuncios> {
   Future _verificarUsuarioLogado() async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
+    // ignore: await_only_futures
     User? usuarioLogado = await auth.currentUser; // firebaseUser
 
     if (usuarioLogado == null) {

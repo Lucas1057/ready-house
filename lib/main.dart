@@ -22,7 +22,7 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: "Vendass   ",
+    title: "Pech   ",
     home: Anuncios(),
     theme: temaPadrao,
     initialRoute: "/l",
@@ -37,3 +37,4 @@ void main() async {
     onGenerateRoute: RouteGeneration.generateRoute,
   ));
 }
+   

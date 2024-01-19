@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+// ignore: camel_case_types
 class Tela_imagem extends StatefulWidget {
   @override
   _Tela_imagemState createState() => _Tela_imagemState();
 }
 
+// ignore: camel_case_types
 class _Tela_imagemState extends State<Tela_imagem> {
   List<String> imagens = [];
 

@@ -15,13 +15,14 @@ class _FotoState extends State<Foto> {
   final imagePicker = ImagePicker();
   File? imageFile;
   //funcao pra add imagem
+  // ignore: non_constant_identifier_names
   Pick(ImageSource source) async {
     //variavel pickerFile
     final pickedFile = await imagePicker.pickImage(source: source);
     //verificar se o usuario vai de fato selecionar a imagem
-    if (pickedFile != Null) {
+    if (pickedFile != null) {
       setState(() {
-        imageFile = File(pickedFile!.path);
+        imageFile = File(pickedFile.path);
       });
     }
   }
@@ -29,7 +30,9 @@ class _FotoState extends State<Foto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( backgroundColor: Colors.blue,),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+      ),
       body: Center(
         child: Column(
           children: [

@@ -10,6 +10,7 @@ class MeusAnuncios extends StatefulWidget {
 
 class _MeusAnunciosState extends State<MeusAnuncios> {
   List<String> itensMenu = ["menu", "menives"];
+  // ignore: unused_element
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {
       case "Meus anúncios":

@@ -6,11 +6,10 @@ import 'package:vendass/views/Anuncios.dart';
 import 'package:vendass/views/Login.dart';
 import 'package:vendass/views/MeusAnuncios.dart';
 import 'package:vendass/views/NovoAnuncio.dart';
-import 'package:vendass/views/Foto.dart';
-import 'package:vendass/views/tela_imagem.dart';
 
 class RouteGeneration {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    // ignore: unused_local_variable
     final args = settings.arguments;
     return generateRoute(settings);
 

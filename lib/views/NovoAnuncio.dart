@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
 
@@ -12,28 +15,23 @@ class NovoAnuncio extends StatefulWidget {
 }
 
 class _NovoAnuncioState extends State<NovoAnuncio> {
+  List<File> _listaImagens = [];
   final _formKey = GlobalKey<FormState>();
 
-  final imagePicker = ImagePicker();
-  late Uint8List imagem = Uint8List(0);
+  ImagePicker imagePicker = ImagePicker();
 
-  //funcao pra add imagem
+  // ignore: unused_element
+  _selecionarImagemGaleria() async {
+    XFile? imagemEscolhida =
+        await imagePicker.pickImage(source: ImageSource.gallery);
 
-  // ignore: non_constant_identifier_names
-  _selecionarImagemGaleria(ImageSource source) async {
-    try {
-      final XFile? xfile = await imagePicker.pickImage(source: source);
+    File arquivoImagem = File(imagemEscolhida!.path);
 
-      File imageN = File(xfile!.path);
-
-      setState(() {
-        imagem = imageN.readAsBytesSync();
-      });
-    } catch (e) {}
+    setState(() {
+      _listaImagens.add(arquivoImagem);
+    });
   }
 
-  // ignore: unused_field, prefer_final_fields
-  List<File> _listaImagens = List.empty();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,14 +75,14 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                         horizontal: 8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        _selecionarImagemGaleria(
-                                            ImageSource.gallery);
+                                        _selecionarImagemGaleria();
                                       },
                                       child: CircleAvatar(
                                         backgroundColor: Colors.grey[400],
                                         radius: 50,
-                                        // backgroundImage:
-                                        //  FileImage(_listaImagens[indice]),
+                                        //backgroundImage: imageFile != null
+                                        // ? FileImage(imageFile!)
+                                        //: null,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -109,7 +107,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                         horizontal: 8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        /*
+                                        //----------------- parte oculta
                                         showDialog(
                                             context: context,
                                             builder: (context) => Dialog(
@@ -117,9 +115,6 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
-                                                      Image.file(
-                                                        _listaImagens[indice],
-                                                      ),
                                                       BotaoCustomizado(
                                                           texto: "Excluir",
                                                           corTexto:
@@ -137,15 +132,13 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                                     ],
                                                   ),
                                                 ));
-                                      */
+
+                                        //-------------------------------------atew aqui
                                       },
                                       child: CircleAvatar(
                                         radius: 50,
-                                        // backgroundImage:
-                                        // FileImage(_listaImagens[indice]),
-                                        backgroundImage: imagem.isNotEmpty
-                                            ? Image.memory(imagem).image
-                                            : null,
+                                        backgroundImage:
+                                            FileImage(_listaImagens[indice]),
                                         child: Container(
                                           color: const Color.fromRGBO(
                                               255, 255, 255, 0.4),

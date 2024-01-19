@@ -14,21 +14,25 @@ class Usuario {
     return map;
   }
 
+  // ignore: unnecessary_getters_setters
   String get senha => _senha;
   set senha(String value) {
     _senha = value;
   }
 
+  // ignore: unnecessary_getters_setters
   String get email => _email;
   set email(String value) {
     _email = value;
   }
 
+  // ignore: unnecessary_getters_setters
   String get idUsuario => _idUsuario;
   set idUsuario(String value) {
     _idUsuario = value;
   }
 
+  // ignore: unnecessary_getters_setters
   String get nome => _nome;
   set nome(String value) {
     _nome = value;

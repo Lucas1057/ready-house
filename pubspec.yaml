@@ -39,6 +39,8 @@ dependencies:
   firebase_analytics: ^10.7.4
   firebase_auth: ^4.15.3
   image_picker: ^1.0.5
+  cross_file: ^0.3.3+8
+  image_cropper: ^5.0.1
   
 
 dev_dependencies:
@@ -47,9 +49,10 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 flutter_launcher_icons:
   android: "launcher_icon"
-  image_path: "dev_Assets/logo.jpeg"
-  adaptive_icon_foreground: "dev_Assets/logo.jpeg"
-  adaptive_icon_background: "#000000"
+  image_path: "dev_Assets/logo.jpeg" #icone normal
+  adaptive_icon_foreground: "dev_Assets/logo.jpeg" #icones adapitaveis
+  adaptive_icon_background: "#000000" #cor do icone adapitado
+
   min_sdk_android: 21
   web:
     generate: true
