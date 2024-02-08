@@ -1,11 +1,17 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:io';
+import 'package:brasil_fields/brasil_fields.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:validadores/Validador.dart';
+import 'package:vendass/models/Anuncio.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
+import 'package:vendass/views/widgets/InputCustomizado.dart';
 
 class NovoAnuncio extends StatefulWidget {
   const NovoAnuncio({super.key});
@@ -16,7 +22,13 @@ class NovoAnuncio extends StatefulWidget {
 
 class _NovoAnuncioState extends State<NovoAnuncio> {
   List<File> _listaImagens = [];
+  List<DropdownMenuItem<String>> _listaItensDropEstados = [];
+  List<DropdownMenuItem<String>> _listaItensDropCategorias = [];
   final _formKey = GlobalKey<FormState>();
+  late Anuncio _anuncio;
+  late BuildContext _dialogContext;
+  //late String _itemSelecionadoEstado;
+  //late String _itemSelecionadoCategoria;
 
   ImagePicker imagePicker = ImagePicker();
 
@@ -25,11 +37,105 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
     XFile? imagemEscolhida =
         await imagePicker.pickImage(source: ImageSource.gallery);
 
-    File arquivoImagem = File(imagemEscolhida!.path);
+    File arquivoImagem = File(imagemEscolhida!
+        .path); //---------------------------aqui onde resolvi o erro
 
     setState(() {
       _listaImagens.add(arquivoImagem);
     });
+  }
+
+  _abrirDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,//bloqueio de tela
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Column(mainAxisSize: MainAxisSize.min, children: [
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 20,
+              ),
+              Text("salvando anúncio")
+            ]),
+          );
+        });
+  }
+
+  _salvarAnuncio() async {
+    _abrirDialog(_dialogContext);
+    //upload imagens no storage
+    await _uploadImagens();
+    print("LISTA IMAGENS: ${_anuncio.fotos.toString()}");
+
+    //salvar anuncio no firestore
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    // ignore: unused_local_variable, await_only_futures
+    User usuarioLogado = await auth.currentUser!;
+    String idUsuarioLogadoo = usuarioLogado.uid;
+    db
+        .collection("meus_anuncios")
+        .doc(idUsuarioLogadoo)
+        .collection("anuncios")
+        .doc(_anuncio.id)
+        .set(_anuncio.toMap())
+        .then((_) {
+      Navigator.pop(_dialogContext);
+      Navigator.pop(context);
+    });
+  }
+
+  Future _uploadImagens() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference pastaRaiz = storage.ref();
+    for (var imagem in _listaImagens) {
+      String nomeImagem = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference arquivo = pastaRaiz
+          .child("meus_anuncios") //pasta
+          .child(_anuncio.id) //id do anuncio
+          .child(nomeImagem); //nome da imagem
+      UploadTask uploadTask = arquivo.putFile(imagem);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String url = await taskSnapshot.ref.getDownloadURL();
+      _anuncio.fotos.add(url);
+    }
+  }
+
+  ///controler
+  final TextEditingController _controllerEstado = TextEditingController();
+  final TextEditingController _controllerCategoria = TextEditingController();
+  final TextEditingController _controllerTitulo = TextEditingController();
+  final TextEditingController _controllerPreco = TextEditingController();
+  final TextEditingController _controllerTelefone = TextEditingController();
+  final TextEditingController _controllerDescricao = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarItensDropdown();
+
+    _anuncio = Anuncio.gerarId();
+  }
+
+  _carregarItensDropdown() {
+    //Categoria
+    _listaItensDropCategorias.add(DropdownMenuItem(
+      child: Text("Automóvel"),
+      value: "auto",
+    ));
+    _listaItensDropCategorias.add(DropdownMenuItem(
+      child: Text("Imóvel"),
+      value: "imovel",
+    ));
+    //Estados
+
+    for (var estado in Estados.listaEstadosSigla) {
+      _listaItensDropEstados.add(DropdownMenuItem(
+        child: Text(estado),
+        value: estado,
+      ));
+    }
   }
 
   @override
@@ -115,6 +221,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
+                                                      Image.file(_listaImagens[
+                                                          indice]),
                                                       BotaoCustomizado(
                                                           texto: "Excluir",
                                                           corTexto:
@@ -168,19 +276,144 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   },
                 ),
 //menus Dropdown --------------------------
-                const Row(
+                Row(
                   children: [
-                    Text('Estado'),
-                    Text('Cartegoria'),
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: DropdownButtonFormField(
+                        // value: _itemSelecionadoEstado,
+                        hint: Text("Estados"),
+                        onSaved: (estado) {
+                          _anuncio.estado = estado!;
+                        },
+
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        items: _listaItensDropEstados,
+                        validator: (valor) {
+                          return Validador().validar(Validador.DEFAULT_MESSAGE);
+                        },
+                        onChanged: (valor) {
+                          setState(() {
+                            //   _itemSelecionadoEstado = valor!;
+                          });
+                        },
+                      ),
+                    )),
+                    //-----------------------------Categoria
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: DropdownButtonFormField(
+                        // value: _itemSelecionadoEstado,
+                        hint: Text("Categoria"),
+                        onSaved: (categoria) {
+                          _anuncio.categoria = categoria!;
+                        },
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        items: _listaItensDropCategorias,
+                        validator: (valor) {
+                          return Validador().validar(Validador.DEFAULT_MESSAGE);
+                        },
+                        onChanged: (valor) {
+                          setState(() {
+                            //   _itemSelecionadoEstado = valor!;
+                          });
+                        },
+                      ),
+                    )),
                   ],
                 ),
-                //Caixa de Texto
-                Text("Caixas de Textos"),
+                //Caixa de Texto----------------------------------------------
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: InputCustomizado(
+                    hint: "Título",
+                    onSaved: (titulo) {
+                      _anuncio.titulo = titulo;
+                    },
+                    validator: (valor) {
+                      return Validador()
+                          .add(Validar.OBRIGATORIO, msg: "campo obrigatório")
+                          .valido(valor);
+                    },
+                    controller: _controllerPreco,
+                    inputFormatters: [],
+                    maxLines: 1,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: InputCustomizado(
+                    hint: "Preço",
+                    type: TextInputType.number,
+                    onSaved: (preco) {
+                      _anuncio.preco = preco;
+                    },
+                    validator: (valor) {
+                      return Validador()
+                          .add(Validar.OBRIGATORIO, msg: "campo obrigatório")
+                          .valido(valor);
+                    },
+                    controller: _controllerTitulo,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      RealInputFormatter(moeda: true)
+                    ],
+                    maxLines: 1,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: InputCustomizado(
+                    hint: "Telefone",
+                    type: TextInputType.phone,
+                    onSaved: (telefone) {
+                      _anuncio.telefone = telefone;
+                    },
+                    validator: (valor) {
+                      return Validador()
+                          .add(Validar.OBRIGATORIO, msg: "campo obrigatório")
+                          .valido(valor);
+                    },
+                    controller: _controllerTelefone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter()
+                    ],
+                    maxLines: 1,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: InputCustomizado(
+                    hint: "Descrição (200 caracteres)",
+                    onSaved: (descricao) {
+                      _anuncio.descricao = descricao;
+                    },
+                    validator: (valor) {
+                      return Validador()
+                          .add(Validar.OBRIGATORIO, msg: "campo obrigatório")
+                          .maxLength(200, msg: "Maximo de 200 caracteres")
+                          .valido(valor);
+                    },
+                    controller: _controllerDescricao,
+                    inputFormatters: [],
+                    maxLines: 3,
+                  ),
+                ),
                 BotaoCustomizado(
                     texto: "Cadastrar anuncio",
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         //================================================
+                        //salvar cmpos
+                        _formKey.currentState?.save();
+                        //Configura dialog context
+                        _dialogContext = context;
+
+                        //salvar anuncio
+                        _salvarAnuncio();
                       }
                     })
               ],

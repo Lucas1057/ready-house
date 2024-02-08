@@ -35,6 +35,7 @@ class _LoginState extends State<Login> {
 
   _logarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
+
     auth
         .signInWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
@@ -107,13 +108,22 @@ class _LoginState extends State<Login> {
                 controller: _controllerEmail,
                 hint: "E-mail",
                 autofocus: true,
-                type: TextInputType.emailAddress,
+                // ignore: non_constant_identifier_names
+                type: TextInputType.emailAddress, inputFormatters: [],
+                // ignore: non_constant_identifier_names
+                maxLines: 1, validator: (String) {}, onSaved: (String) {},
               ),
               InputCustomizado(
                 controller: _controllerSenha,
                 hint: "Senha",
                 obscure: true,
                 type: TextInputType.text,
+                inputFormatters: [],
+                maxLines: 1,
+                // ignore: non_constant_identifier_names
+                validator: (String) {},
+                // ignore: non_constant_identifier_names
+                onSaved: (String) {},
               ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Text('Logar'),
