@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_types_as_parameter_names, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:vendass/models/Usuario.dart';
 import 'package:vendass/views/widgets/inputCustomizado.dart';
@@ -26,7 +28,7 @@ class _LoginState extends State<Login> {
     auth
         .createUserWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
-        // ignore: non_constant_identifier_names
+        
         .then((FirebaseUser) {
       //redirecionar a tela principal
       Navigator.pushReplacementNamed(context, "/");
@@ -39,7 +41,7 @@ class _LoginState extends State<Login> {
     auth
         .signInWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
-        // ignore: non_constant_identifier_names
+        
         .then((FirebaseUser) {
       //redirecionar a principal
       Navigator.pushReplacementNamed(context, "/");
@@ -108,9 +110,9 @@ class _LoginState extends State<Login> {
                 controller: _controllerEmail,
                 hint: "E-mail",
                 autofocus: true,
-                // ignore: non_constant_identifier_names
-                type: TextInputType.emailAddress, inputFormatters: [],
-                // ignore: non_constant_identifier_names
+                
+                type: TextInputType.emailAddress, inputFormatters: const [],
+               
                 maxLines: 1, validator: (String) {}, onSaved: (String) {},
               ),
               InputCustomizado(
@@ -118,11 +120,11 @@ class _LoginState extends State<Login> {
                 hint: "Senha",
                 obscure: true,
                 type: TextInputType.text,
-                inputFormatters: [],
+                inputFormatters: const [],
                 maxLines: 1,
-                // ignore: non_constant_identifier_names
+                
                 validator: (String) {},
-                // ignore: non_constant_identifier_names
+                
                 onSaved: (String) {},
               ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [

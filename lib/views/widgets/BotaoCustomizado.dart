@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors, unnecessary_this
+
 import 'package:flutter/material.dart';
 
 class BotaoCustomizado extends StatelessWidget {
@@ -5,7 +7,7 @@ class BotaoCustomizado extends StatelessWidget {
   final Color corTexto;
   final VoidCallback onPressed;
 
-  BotaoCustomizado(
+  const BotaoCustomizado(
       {required this.texto,
       this.corTexto = Colors.white,
       required this.onPressed});

@@ -1,5 +1,4 @@
-// ignore: file_names
-// ignore_for_file: dead_code
+// ignore_for_file: file_names, dead_code
 
 import 'package:flutter/material.dart';
 import 'package:vendass/views/Anuncios.dart';
@@ -36,7 +35,7 @@ class RouteGeneration {
     return MaterialPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("tela não encontrada"),
+          title: const Text("tela não encontrada"),
         ),
         body: const Center(
           child: Text("tela não encontrada!"),

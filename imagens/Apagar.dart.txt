@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 
 class Apagar extends StatefulWidget {
@@ -12,7 +13,7 @@ class _ApagarState extends State<Apagar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("imagem"),
+        title: const Text("imagem"),
         backgroundColor: Colors.blue,
       ),
       body: Column(

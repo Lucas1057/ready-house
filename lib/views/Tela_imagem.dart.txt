@@ -1,9 +1,12 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: camel_case_types
 class Tela_imagem extends StatefulWidget {
   @override
+  // ignore: library_private_types_in_public_api
   _Tela_imagemState createState() => _Tela_imagemState();
 }
 
@@ -38,7 +41,7 @@ class _Tela_imagemState extends State<Tela_imagem> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
-          title: Text('Lista de imagens'),
+          title: const Text('Lista de imagens'),
         ),
         body: Center(
           child: ListView(
@@ -50,6 +53,7 @@ class _Tela_imagemState extends State<Tela_imagem> {
                 },
                 child: Column(
                   children: [
+                    // ignore: sized_box_for_whitespace
                     Container(
                       width: 100,
                       height: 100,

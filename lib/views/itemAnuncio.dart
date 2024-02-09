@@ -1,10 +1,14 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:vendass/models/Anuncio.dart';
 
+// ignore: must_be_immutable
 class ItemAnuncio extends StatelessWidget {
   Anuncio anuncio;
   VoidCallback onTapItem;
   VoidCallback onPressedRemover;
+  // ignore: use_key_in_widget_constructors
   ItemAnuncio ({
     required this.anuncio,
     required this.onTapItem,
@@ -14,10 +18,10 @@ class ItemAnuncio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: this.onTapItem,
+      onTap: onTapItem,//this.onTapItem
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           child: Row(
             children: [
               //Imagem
@@ -31,13 +35,13 @@ class ItemAnuncio extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         anuncio.titulo,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text("R\$ ${anuncio.preco}")
@@ -46,11 +50,11 @@ class ItemAnuncio extends StatelessWidget {
                 ),
               ),
               // ignore: unnecessary_null_comparison
-              if(this.onPressedRemover != null)  Expanded(
+              if(onPressedRemover != null)  Expanded(//this.onPressedRemover
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: this.onPressedRemover,
-                  child: Padding(
+                  onPressed: onPressedRemover,//this.onPressedRemover
+                  child: const Padding(
                     padding: EdgeInsets.all(10),
                     child: Icon(Icons.delete),
                   ),

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 class Usuario {
   late String _idUsuario;
   late String _nome;

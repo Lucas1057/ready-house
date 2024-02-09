@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
+
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +40,7 @@ Future<Stream<QuerySnapshot>>_adicionarListenerAnuncios() async {
     stream.listen((dados){
       _controller.add( dados );
     });
-return Stream.empty();//errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+return const Stream.empty();//errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
   }
   _removerAnuncio(String idAnuncio){
 FirebaseFirestore db = FirebaseFirestore.instance;
@@ -45,7 +48,11 @@ db.collection("meus_anuncios")
 .doc(_idUsuarioLogado)
 .collection("anuncios")
 .doc(idAnuncio)
-.delete();
+.delete().then((_) {
+  db.collection("anuncios")
+  .doc(idAnuncio)
+  .delete();
+});
   }
   
   @override
@@ -80,7 +87,7 @@ db.collection("meus_anuncios")
 
   @override
   Widget build(BuildContext context) {
-    var carregandoDados = Center(
+    var carregandoDados = const Center(
       child: Column(
         children: [Text("Carregando anúncios"), CircularProgressIndicator()],
       ),
@@ -104,7 +111,8 @@ db.collection("meus_anuncios")
               case ConnectionState.done:
                 //Exibir mensagem de erro
                 if (Snapshot.hasError)
-                  return Text("Erro ao carregar os dados!");
+                  // ignore: curly_braces_in_flow_control_structures
+                  return const Text("Erro ao carregar os dados!");
                 QuerySnapshot/*<Object?>*/? querySnapshot = Snapshot.data;
                 return ListView.builder(
                     // itemCount: QuerySnapshot.docs.length,//contar a quantidade de documento que tem dentro de querysnapshort
@@ -115,21 +123,22 @@ db.collection("meus_anuncios")
 
                           Anuncio anuncio = Anuncio.fromDocumentSnapshot(documentSnapshot);//aqui tinha colocado como parametro DocumentSnapshot
                       return ItemAnuncio(
-                        anuncio: anuncio,
+                        anuncio: anuncio,// o anuncio fica aqui
+                        
                         onPressedRemover: () {
                           showDialog(context: context, builder: (context){
                             return AlertDialog(
-                              title: Text("Confirmar"),
-                              content: Text("Deseja realmente excluir o anuncio?"),
+                              title: const Text("Confirmar"),
+                              content: const Text("Deseja realmente excluir o anuncio?"),
                               actions: [
-                                ElevatedButton(onPressed: (){Navigator.of(context).pop();}, child: Text("Cancelar",
+                                ElevatedButton(onPressed: (){Navigator.of(context).pop();}, child: const Text("Cancelar",
                               style: TextStyle(
                                 color: Colors.grey
                               ),)),
                               ElevatedButton(onPressed: (){
                                 _removerAnuncio(anuncio.id);
                                 Navigator.of(context).pop();//----------------------- minha alteracao
-                              }, child: Text("Remover",
+                              }, child: const Text("Remover",
                               style: TextStyle(
                                 color: Colors.grey
                               ),))
@@ -141,7 +150,7 @@ db.collection("meus_anuncios")
                     });
             }
             // ignore: dead_code
-            return Container();
+            return const SizedBox(height: 100,width: 100);
           }
           ),
            floatingActionButton: FloatingActionButton(

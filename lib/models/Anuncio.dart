@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this, file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Anuncio {

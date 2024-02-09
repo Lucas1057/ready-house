@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, sort_child_properties_last, avoid_unnecessary_containers
+
 import 'dart:io';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:validadores/Validador.dart';
 import 'package:vendass/models/Anuncio.dart';
+import 'package:vendass/util/Configuracoes.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
 import 'package:vendass/views/widgets/InputCustomizado.dart';
 
@@ -21,8 +24,11 @@ class NovoAnuncio extends StatefulWidget {
 }
 
 class _NovoAnuncioState extends State<NovoAnuncio> {
+  // ignore: prefer_final_fields
   List<File> _listaImagens = [];
+  // ignore: prefer_final_fields
   List<DropdownMenuItem<String>> _listaItensDropEstados = [];
+  // ignore: prefer_final_fields
   List<DropdownMenuItem<String>> _listaItensDropCategorias = [];
   final _formKey = GlobalKey<FormState>();
   late Anuncio _anuncio;
@@ -50,7 +56,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
         context: context,
         barrierDismissible: false,//bloqueio de tela
         builder: (BuildContext context) {
-          return AlertDialog(
+          return const AlertDialog(
             content: Column(mainAxisSize: MainAxisSize.min, children: [
               CircularProgressIndicator(),
               SizedBox(
@@ -66,7 +72,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
     _abrirDialog(_dialogContext);
     //upload imagens no storage
     await _uploadImagens();
-    print("LISTA IMAGENS: ${_anuncio.fotos.toString()}");
+    //print("LISTA IMAGENS: ${_anuncio.fotos.toString()}");
 
     //salvar anuncio no firestore
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -81,8 +87,14 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
         .doc(_anuncio.id)
         .set(_anuncio.toMap())
         .then((_) {
-      Navigator.pop(_dialogContext);
+          //salvar anuncio publico
+          db.collection("anuncios")
+          .doc(_anuncio.id)
+          .set(_anuncio.toMap()).then((_) {// set no lugaar de setDate()
+              Navigator.pop(_dialogContext);
       Navigator.pop(context);
+          });
+    
     });
   }
 
@@ -103,7 +115,9 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
   }
 
   ///controler
+  // ignore: unused_field
   final TextEditingController _controllerEstado = TextEditingController();
+  // ignore: unused_field
   final TextEditingController _controllerCategoria = TextEditingController();
   final TextEditingController _controllerTitulo = TextEditingController();
   final TextEditingController _controllerPreco = TextEditingController();
@@ -120,22 +134,10 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
 
   _carregarItensDropdown() {
     //Categoria
-    _listaItensDropCategorias.add(DropdownMenuItem(
-      child: Text("Automóvel"),
-      value: "auto",
-    ));
-    _listaItensDropCategorias.add(DropdownMenuItem(
-      child: Text("Imóvel"),
-      value: "imovel",
-    ));
+    _listaItensDropCategorias = Configuracoes.getCategorias();
     //Estados
 
-    for (var estado in Estados.listaEstadosSigla) {
-      _listaItensDropEstados.add(DropdownMenuItem(
-        child: Text(estado),
-        value: estado,
-      ));
-    }
+   _listaItensDropEstados = Configuracoes.getEstados();
   }
 
   @override
@@ -158,6 +160,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   initialValue: _listaImagens,
                   validator: (imagens) {
                     //imagens.length
+                    // ignore: prefer_is_empty
                     if (imagens!.length == 0) {
                       return "Necessario selecionar uma imagem!";
                     }
@@ -167,6 +170,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   builder: (state) {
                     return Column(
                       children: [
+                        // ignore: sized_box_for_whitespace
                         Container(
                           height: 100,
                           child: ListView.builder(
@@ -207,6 +211,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                     ),
                                   );
                                 }
+                                // ignore: prefer_is_empty
                                 if (_listaImagens.length > 0) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -280,15 +285,15 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   children: [
                     Expanded(
                         child: Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: DropdownButtonFormField(
                         // value: _itemSelecionadoEstado,
-                        hint: Text("Estados"),
+                        hint: const Text("Estados"),
                         onSaved: (estado) {
                           _anuncio.estado = estado!;
                         },
 
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: const TextStyle(color: Colors.black, fontSize: 20),
                         items: _listaItensDropEstados,
                         validator: (valor) {
                           return Validador().validar(Validador.DEFAULT_MESSAGE);
@@ -303,14 +308,14 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                     //-----------------------------Categoria
                     Expanded(
                         child: Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: DropdownButtonFormField(
                         // value: _itemSelecionadoEstado,
-                        hint: Text("Categoria"),
+                        hint: const Text("Categoria"),
                         onSaved: (categoria) {
                           _anuncio.categoria = categoria!;
                         },
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: const TextStyle(color: Colors.black, fontSize: 20),
                         items: _listaItensDropCategorias,
                         validator: (valor) {
                           return Validador().validar(Validador.DEFAULT_MESSAGE);
@@ -338,7 +343,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                           .valido(valor);
                     },
                     controller: _controllerPreco,
-                    inputFormatters: [],
+                    inputFormatters: const [],
                     maxLines: 1,
                   ),
                 ),
@@ -398,7 +403,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                           .valido(valor);
                     },
                     controller: _controllerDescricao,
-                    inputFormatters: [],
+                    inputFormatters: const [],
                     maxLines: 3,
                   ),
                 ),
