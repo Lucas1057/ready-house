@@ -1,30 +1,30 @@
 // ignore_for_file: file_names, dead_code
 
 import 'package:flutter/material.dart';
-import 'package:vendass/views/Anuncios.dart';
-import 'package:vendass/views/Login.dart';
-import 'package:vendass/views/MeusAnuncios.dart';
-import 'package:vendass/views/NovoAnuncio.dart';
+import 'package:vendass/views/anuncios.dart';
+import 'package:vendass/views/detalhes_anuncio.dart';
+import 'package:vendass/views/login.dart';
+import 'package:vendass/views/meus_anuncios.dart';
+import 'package:vendass/views/novo_anuncio.dart';
 
 class RouteGeneration {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // ignore: unused_local_variable
-    final args = settings.arguments;
+   // final args = settings.arguments;
+
     return generateRoute(settings);
 
     switch (settings.name) {
       case "/l":
-        return MaterialPageRoute(builder: (_) => Anuncios());
+        return MaterialPageRoute(builder: (_) => const Anuncios());
       case "/login":
         return MaterialPageRoute(builder: (_) => const Login());
       case "/meus-anuncios":
         return MaterialPageRoute(builder: (_) => const MeusAnuncios());
       case "/novo-anuncio":
         return MaterialPageRoute(builder: (_) => const NovoAnuncio());
-      /*case "/foto":
-        return MaterialPageRoute(builder: (_) => const Foto());
-      case "/tela":
-        return MaterialPageRoute(builder: (_) => Tela_imagem());*/
+
+      case "/detalhes-anuncio":
+        return MaterialPageRoute(builder: (_) => DetalhesAnuncio());
 
       default:
         _erroRota();

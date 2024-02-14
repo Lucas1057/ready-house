@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+
 class BotaoCustomizado extends StatelessWidget {
   final String texto;
   final Color corTexto;
@@ -9,19 +10,21 @@ class BotaoCustomizado extends StatelessWidget {
 
   const BotaoCustomizado(
       {required this.texto,
-      this.corTexto = Colors.white,
+      this.corTexto = Colors.white24,
       required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+    return FloatingActionButton(
+      backgroundColor:Colors.cyan ,
+    // style: ElevatedButton.styleFrom(backgroundColor: temaPadrao.foregroundColor),
 
       //shape:RoudedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       onPressed: this.onPressed,
       child: Text(
         this.texto,
         style: TextStyle(color: this.corTexto, fontSize: 20),
+        
       ),
     );
   }

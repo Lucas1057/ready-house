@@ -1,12 +1,13 @@
-// ignore_for_file: file_names
+
 
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vendass/main.dart';
 import 'package:vendass/models/Anuncio.dart';
-import 'package:vendass/views/itemAnuncio.dart';
+import 'package:vendass/views/item_anuncio.dart';
 
 class MeusAnuncios extends StatefulWidget {
   const MeusAnuncios({super.key});
@@ -95,7 +96,8 @@ db.collection("meus_anuncios")
     return Scaffold(
         appBar: AppBar(
           title: const Text('Meus Anúncios'),
-          backgroundColor: Colors.green,
+          backgroundColor: temaPadrao.backgroundColor,
+          foregroundColor: temaPadrao.foregroundColor,
         ),
         body:StreamBuilder(
           stream: _controller.stream,
@@ -153,9 +155,13 @@ db.collection("meus_anuncios")
             return const SizedBox(height: 100,width: 100);
           }
           ),
-           floatingActionButton: FloatingActionButton(
-          foregroundColor: Colors.white,
-          child: const Icon(Icons.add),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+           floatingActionButton: FloatingActionButton.extended(
+          foregroundColor: temaPadrao.foregroundColor,
+          backgroundColor: temaPadrao.backgroundColor,
+           icon :const Icon(Icons.add),//versao extendida
+           label:const Text("Adicionar Novo"),//versao extendida
+          //child: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, "/novo-anuncio");
           },

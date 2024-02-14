@@ -10,7 +10,7 @@ class Anuncio {
   late String _preco;
   late String _telefone;
   late String _descricao;
-  late List<String> _fotos;
+   late List<String> _fotos;
 
   Anuncio();
   Anuncio.fromDocumentSnapshot(DocumentSnapshot documentSnapshot){

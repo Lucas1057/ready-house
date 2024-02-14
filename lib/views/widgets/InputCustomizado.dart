@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vendass/main.dart';
 
 class InputCustomizado extends StatelessWidget {
   final TextEditingController controller;
@@ -45,8 +46,8 @@ class InputCustomizado extends StatelessWidget {
           contentPadding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
           hintText: hint,
           filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(6))),
+          fillColor: Colors.white38,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(18))),
     );
   }
 }

@@ -1,30 +1,32 @@
-// ignore_for_file: file_names, use_key_in_widget_constructors, prefer_is_empty
+
 
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:vendass/main.dart';
 import 'package:vendass/models/Anuncio.dart';
 import 'package:vendass/util/Configuracoes.dart';
-import 'package:vendass/views/itemAnuncio.dart';
+import 'package:vendass/views/item_anuncio.dart';
 
 class Anuncios extends StatefulWidget {
+  const Anuncios({super.key});
+
   @override
   State<Anuncios> createState() => _AnunciosState();
 }
 
 class _AnunciosState extends State<Anuncios> {
-
-  
   List<String> itensMenu = [];
 
   late List<DropdownMenuItem<String>> _listaItensDropCategorias;
   late List<DropdownMenuItem<String>> _listaItensDropEstados;
-     
-     final _controler = StreamController<QuerySnapshot>.broadcast();
-     String? _itemSelecionadoEstado;
-     String? _itemSelecionadoCategoria;
+  //late List<DropdownMenuItem<String>> _listaItensDropVans;
+
+  final _controler = StreamController<QuerySnapshot>.broadcast();
+  String? _itemSelecionadoEstado;
+  String? _itemSelecionadoCategoria;
+  String? _itemSelecionadoVans;
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {
       case "Meus anúncios":
@@ -33,98 +35,106 @@ class _AnunciosState extends State<Anuncios> {
         break;
       case "Entrar / Cadastrar":
         Navigator.pushNamed(context, "/login");
-        //print('Meus anuncios');
         break;
       case "Deslogar":
         _deslogarUsuario();
-        break;
-      case "Foto":
-        Navigator.pushNamed(context, "/foto");
-        break;
-      case "Tela":
-        Navigator.pushNamed(context, "/tela");
         break;
     }
   }
 
   _deslogarUsuario() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    await auth.signOut();
 
-    // ignore: use_build_context_synchronously
-    Navigator.pushNamed(context, "/login");
+    Navigator.pushReplacementNamed(context, "/login");
+
+    await auth.signOut();
   }
 
   Future _verificarUsuarioLogado() async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    // ignore: await_only_futures
-    User? usuarioLogado = await auth.currentUser; // firebaseUser
+    User? usuarioLogado = auth.currentUser; // firebaseUser
 
     if (usuarioLogado == null) {
       itensMenu = ["Entrar / Cadastrar"];
     } else {
-      itensMenu = ["Meus anúncios", "Deslogar", /*"Foto", "Tela"*/];
+      itensMenu = [
+        "Meus anúncios",
+        "Deslogar",
+      ];
     }
   }
- _carregarItensDropdown() {
+
+  _carregarItensDropdown() {
     //Categoria
     _listaItensDropCategorias = Configuracoes.getCategorias();
     //Estados
 
-   _listaItensDropEstados = Configuracoes.getEstados();
+    _listaItensDropEstados = Configuracoes.getEstados();
+    //Vans
+    //  _listaItensDropVans = Configuracoes.getVans();
   }
 
-  Future<Stream<QuerySnapshot>> _adicionarListenerAnuncios() async{
-FirebaseFirestore db = FirebaseFirestore.instance;
-Stream<QuerySnapshot> stream = db.collection("anuncios")
-.snapshots();
+  Future<Stream<QuerySnapshot>> _adicionarListenerAnuncios() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    Stream<QuerySnapshot> stream = db.collection("anuncios").snapshots();
 
 //--------------------
-stream.listen((dados) {
-  _controler.add(dados);
- });
+    stream.listen((dados) {
+      _controler.add(dados);
+    });
 //---------------------------
-return const Stream.empty();
+    return const Stream.empty();
   }
+
   //----------------------------------STREAM BUILDER FILTRAR ANUNCIO
-   Future<Stream<QuerySnapshot>> _filtrarAnuncios() async{
-FirebaseFirestore db = FirebaseFirestore.instance;
+  Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
 
-Query query=db.collection("anuncios");
+    Query query = db.collection("anuncios");
 
-if(_itemSelecionadoEstado != null){
-query = query.where("estado",isEqualTo: _itemSelecionadoEstado);
-}
-if(_itemSelecionadoCategoria != null){
-query = query.where("categoria",isEqualTo: _itemSelecionadoCategoria);
-}
-Stream<QuerySnapshot> stream = query.snapshots();
+    if (_itemSelecionadoEstado != null) {
+      query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
+    }
+    if (_itemSelecionadoCategoria != null) {
+      query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
+    }
+    if (_itemSelecionadoVans != null) {
+      query = query.where("vans", isEqualTo: _itemSelecionadoVans);
+    }
+    Stream<QuerySnapshot> stream = query.snapshots();
 //--------------------
-stream.listen((dados) {
-  _controler.add(dados);
- });
+    stream.listen((dados) {
+      _controler.add(dados);
+    });
 //---------------------------
-return const Stream.empty();
+    return const Stream.empty();
   }
+
   //---------------------------------------------------------------------------------------
   @override
   void initState() {
     super.initState();
     _carregarItensDropdown();
-    
+
     _verificarUsuarioLogado();
-     _adicionarListenerAnuncios() ;
+    _adicionarListenerAnuncios();
   }
 
   @override
   Widget build(BuildContext context) {
+    var carregandoDados = const Center(
+      child: Column(
+        children: [Text("Carregando ánunioss"), CircularProgressIndicator()],
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: temaPadrao.backgroundColor,
+        foregroundColor: temaPadrao.foregroundColor,
         title: const Text(
-          "OLX",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          "PECH",
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0,
         actions: [
@@ -140,88 +150,138 @@ return const Stream.empty();
               })
         ],
       ),
-      // ignore: avoid_unnecessary_containers
-      body: Container(
-      
-        child: Column(children: [
+      body: Column(
+        children: [
           //filtros
-Row(children: [
-  Expanded(child: DropdownButtonHideUnderline(child: Center(
-    child: DropdownButton(
-      iconEnabledColor: const Color(0xff9c27b0) ,dropdownColor: Colors.amber,
-      value: _itemSelecionadoEstado,// esse erro aqui initialied
-      items: _listaItensDropEstados,
-      style: const TextStyle(fontSize:22 ,color: Colors.black ),
-      
-       onChanged:(estado){
-        setState(() {
-          _itemSelecionadoEstado = estado!;
-          _filtrarAnuncios();
-        });
-      }),
-  ) ,)
-  ),
-
-Container(
-  color: Colors.grey[200],
-  width:2 ,
-  height: 60,
-),
-  Expanded(child: DropdownButtonHideUnderline(child: Center(
-    child: DropdownButton(
-      iconEnabledColor: const Color(0xff9c27b0) ,
-      value: _itemSelecionadoCategoria,
-      items: _listaItensDropCategorias,
-      style: const TextStyle(fontSize:22 ,color: Colors.black ),
-      
-       onChanged:(categoria){
-        setState(() {
-          _itemSelecionadoCategoria = categoria!;
-          _filtrarAnuncios();
-        });
-      }),
-  ) ,)
-  ),
-],),
-
+          Row(
+            children: [
+              Expanded(
+                  child: DropdownButtonHideUnderline(
+                child: Center(
+                  child: DropdownButton(
+                      iconEnabledColor: const Color(0xff9c27b0),
+                      dropdownColor: Colors.amber,
+                      value:
+                          _itemSelecionadoEstado, // esse erro aqui initialied
+                      items: _listaItensDropEstados,
+                      style: const TextStyle(fontSize: 22, color: Colors.black),
+                      onChanged: (estado) {
+                        setState(() {
+                          _itemSelecionadoEstado = estado!;
+                          _filtrarAnuncios();
+                        });
+                      }),
+                ),
+              )),
+              Container(
+                color: Colors.grey[200],
+                width: 2,
+                height: 60,
+              ),
+              Expanded(
+                  child: DropdownButtonHideUnderline(
+                child: Center(
+                  child: DropdownButton(
+                      iconEnabledColor: const Color(0xff9c27b0),
+                      value: _itemSelecionadoCategoria,
+                      items: _listaItensDropCategorias,
+                      style: const TextStyle(fontSize: 22, color: Colors.black),
+                      onChanged: (categoria) {
+                        setState(() {
+                          _itemSelecionadoCategoria = categoria!;
+                          _filtrarAnuncios();
+                        });
+                      }),
+                ),
+              )),
+              Container(
+                color: Colors.grey[200],
+                width: 2,
+                height: 60,
+              ),
+              /* Expanded(
+                  child: DropdownButtonHideUnderline(
+                child: Center(
+                  child: DropdownButton(
+                      iconEnabledColor: const Color(0xff9c27b0),
+                      value: _itemSelecionadoVans,
+                      items: _listaItensDropVans,
+                      style:
+                          const TextStyle(fontSize: 22, color: Colors.black),
+                      onChanged: (vans) {
+                        setState(() {
+                          _itemSelecionadoVans = vans!;
+                          _filtrarAnuncios();
+                        });
+                      }),
+                ),
+              )),*/
+            ],
+          ),
 
           //Listas de anúncios exibicão dos dados
-StreamBuilder(stream:_controler.stream, 
-builder: (context,snapshot){
-  switch(snapshot.connectionState){
-case ConnectionState.none:
-case ConnectionState.waiting:
-case ConnectionState.active:
-case ConnectionState.done:
+          StreamBuilder(
+              stream: _controler.stream,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return carregandoDados;
+                    
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    QuerySnapshot<Object?>? querySnapshot = snapshot.data;
+                    if (querySnapshot == null) {
+                      return Container(
+                        padding: const EdgeInsets.all(25),
+                        child: const Text(
+                          "Nenhum anúncio! :( ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: querySnapshot.docs.length,
+                          itemBuilder: (_, indice) {
+                            List<DocumentSnapshot> anuncios =
+                                querySnapshot.docs.toList();
+                            DocumentSnapshot documentSnapshot =
+                                anuncios[indice];
+                            Anuncio anuncio =
+                                Anuncio.fromDocumentSnapshot(documentSnapshot);
 
-    QuerySnapshot<Object?>? querySnapshot = snapshot.data;
-   if( querySnapshot?.docs.length== 0){
-return Container(
-  padding: const EdgeInsets.all(25),
-  child: const Text("Nenhum anúncio! :( ",style: TextStyle(
-    fontWeight: FontWeight.bold
-  ),),
-);
-   }
-   return Expanded(
-    child: ListView.builder(
-      itemCount: querySnapshot?.docs.length ,
-      itemBuilder: (_, indice){
-         List<DocumentSnapshot> anuncios =
-                          querySnapshot!.docs.toList();
-                          DocumentSnapshot documentSnapshot = anuncios[indice];
-                          Anuncio anuncio = Anuncio.fromDocumentSnapshot(documentSnapshot);
-
-                          return ItemAnuncio(anuncio: anuncio, onTapItem: (){}, onPressedRemover:(){});
-      }),
-      );
-  }
-  //return Container();
-
-}
-)
-        ],),
+                            return ItemAnuncio(
+                                anuncio: anuncio,
+                                onTapItem: () {
+                                  Navigator.pushNamed(
+                                      context, "/detalhes-anuncio",
+                                      arguments:
+                                          anuncio); //--------------------------
+                                  //DetalhesAnuncio();
+                                },
+                                onPressedRemover: () {});
+                          }),
+                    );
+                }
+                //return Container();
+              })
+        ],
       ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Transporte",
+                  style: TextStyle(color: Colors.white, fontSize: 8),
+                ),
+                Icon(Icons.car_crash_rounded, color: Colors.white),
+              ]),
+          onPressed: () {
+            Navigator.pushNamed(context, "/map");
+          }),
     );
   }
 }

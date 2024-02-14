@@ -4,6 +4,26 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 
 class Configuracoes{
+  static List <DropdownMenuItem<String>> getVans(){
+
+//vans
+  
+List<DropdownMenuItem<String>> listaItensDropVans = [];
+
+
+  
+ listaItensDropVans.add(const DropdownMenuItem(
+      
+      child: Text("Vans",style: TextStyle(
+        color: Color(0xff9c27b0),
+      ),),
+      value: null,
+    ));
+
+    return  listaItensDropVans;
+  
+}
+  //--------------------------------------------------------------------------------
 static List <DropdownMenuItem<String>> getEstados(){
 
 //Região

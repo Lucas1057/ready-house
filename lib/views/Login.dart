@@ -1,7 +1,8 @@
-// ignore_for_file: file_names, avoid_types_as_parameter_names, non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names
 
 import 'package:flutter/material.dart';
-import 'package:vendass/models/Usuario.dart';
+import 'package:vendass/main.dart';
+import 'package:vendass/models/usuario.dart';
 import 'package:vendass/views/widgets/inputCustomizado.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
@@ -28,7 +29,6 @@ class _LoginState extends State<Login> {
     auth
         .createUserWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
-        
         .then((FirebaseUser) {
       //redirecionar a tela principal
       Navigator.pushReplacementNamed(context, "/");
@@ -41,7 +41,6 @@ class _LoginState extends State<Login> {
     auth
         .signInWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
-        
         .then((FirebaseUser) {
       //redirecionar a principal
       Navigator.pushReplacementNamed(context, "/");
@@ -85,89 +84,108 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: const Text(
-            'olx',
-          ),
+      appBar: AppBar(
+        foregroundColor: temaPadrao.foregroundColor,
+        backgroundColor: temaPadrao.backgroundColor,
+        title: const Text(
+          'Pech',
         ),
-        backgroundColor: Colors.white,
-        body: Container(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 32),
-                child: Image.asset(
+      ),
+      backgroundColor: Colors.white10,
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(bottom: 32),
+              child: Padding(
+                padding: EdgeInsets.all(50.0),
+                child: Center(
+                    child: Text(
+                  "PECH",
+                  style: TextStyle(
+                      color: Colors.white60,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
+                )),
+              ), /* Image.asset(
                   "imagens/logo.png",
                   width: 2,
                   height: 150,
-                ),
+                ),*/
+            ),
+            InputCustomizado(
+              controller: _controllerEmail,
+              hint: "E-mail",
+              autofocus: true,
+              type: TextInputType.emailAddress,
+              inputFormatters: const [],
+              maxLines: 1,
+              validator: (String) {},
+              onSaved: (String) {},
+            ),
+            const SizedBox(height: 15,),
+            InputCustomizado(
+              controller: _controllerSenha,
+              hint: "Senha",
+              obscure: true,
+              type: TextInputType.text,
+              inputFormatters: const [],
+              maxLines: 1,
+              validator: (String) {},
+              onSaved: (String) {},
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text(
+                'Logar',
+                style: TextStyle(color: Colors.white),
               ),
-              InputCustomizado(
-                controller: _controllerEmail,
-                hint: "E-mail",
-                autofocus: true,
-                
-                type: TextInputType.emailAddress, inputFormatters: const [],
-               
-                maxLines: 1, validator: (String) {}, onSaved: (String) {},
-              ),
-              InputCustomizado(
-                controller: _controllerSenha,
-                hint: "Senha",
-                obscure: true,
-                type: TextInputType.text,
-                inputFormatters: const [],
-                maxLines: 1,
-                
-                validator: (String) {},
-                
-                onSaved: (String) {},
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Text('Logar'),
-                Switch(
-                  value: _cadastrar,
-                  onChanged: (bool valor) {
-                    setState(() {
-                      _cadastrar = valor;
-                      _textBotao = "Entrar";
+              Switch(
+                activeTrackColor: Colors.white24,
+                inactiveTrackColor: Colors.white12,
+                value: _cadastrar,
+                onChanged: (bool valor) {
+                  setState(() {
+                    _cadastrar = valor;
+                    _textBotao = "Entrar";
 
-                      if (_cadastrar) {
-                        _textBotao = "Cadastrar";
-                      }
-                    });
-                  },
+                    if (_cadastrar) {
+                      _textBotao = "Cadastrar";
+                    }
+                  });
+                },
+              ),
+              const Text(
+                'Cadastrar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ]),
+            BotaoCustomizado(
+                texto: _textBotao,
+                corTexto: Colors.black87,
+                onPressed: () {
+                  _validarCampos();
+                }),
+                GestureDetector(
+                  child: const Text("Ir para anúncio",style: TextStyle(color: Colors.white),),onTap: (){
+                  Navigator.pushReplacementNamed(context, "/l");
+                 },
                 ),
-                const Text('Cadastrar')
-              ]),
-              BotaoCustomizado(
-                  texto: _textBotao,
-                  corTexto: Colors.white,
-                  onPressed: () {
-                    _validarCampos();
-                  }),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  _mensagemErro,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red),
-                ),
-              )
-            ],
-          )),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.settings),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, "/apagar");
-          },
-        ));
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text(
+                _mensagemErro,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
+              ),
+            )
+          ],
+        )),
+      ),
+    );
   }
 }
