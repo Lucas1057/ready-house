@@ -5,8 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vendass/main.dart';
-import 'package:vendass/models/Anuncio.dart';
+import 'package:vendass/models/anuncio.dart';
 import 'package:vendass/util/Configuracoes.dart';
+import 'package:vendass/views/detalhes_anuncio.dart';
 import 'package:vendass/views/item_anuncio.dart';
 
 class Anuncios extends StatefulWidget {
@@ -19,14 +20,15 @@ class Anuncios extends StatefulWidget {
 class _AnunciosState extends State<Anuncios> {
   List<String> itensMenu = [];
 
+  late List<Anuncio> listaAnuncios = [];
+
   late List<DropdownMenuItem<String>> _listaItensDropCategorias;
   late List<DropdownMenuItem<String>> _listaItensDropEstados;
   //late List<DropdownMenuItem<String>> _listaItensDropVans;
 
-  final _controler = StreamController<QuerySnapshot>.broadcast();
+  final Stream<QuerySnapshot<Anuncio>> _controler = anuncioRef.snapshots();
   String? _itemSelecionadoEstado;
   String? _itemSelecionadoCategoria;
-  String? _itemSelecionadoVans;
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {
       case "Meus anúncios":
@@ -75,41 +77,29 @@ class _AnunciosState extends State<Anuncios> {
     //  _listaItensDropVans = Configuracoes.getVans();
   }
 
-  Future<Stream<QuerySnapshot>> _adicionarListenerAnuncios() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    Stream<QuerySnapshot> stream = db.collection("anuncios").snapshots();
-
-//--------------------
-    stream.listen((dados) {
-      _controler.add(dados);
-    });
-//---------------------------
-    return const Stream.empty();
-  }
-
   //----------------------------------STREAM BUILDER FILTRAR ANUNCIO
-  Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
+//   Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
+//     FirebaseFirestore db = FirebaseFirestore.instance;
 
-    Query query = db.collection("anuncios");
+//     Query query = db.collection("anuncios");
 
-    if (_itemSelecionadoEstado != null) {
-      query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
-    }
-    if (_itemSelecionadoCategoria != null) {
-      query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
-    }
-    if (_itemSelecionadoVans != null) {
-      query = query.where("vans", isEqualTo: _itemSelecionadoVans);
-    }
-    Stream<QuerySnapshot> stream = query.snapshots();
-//--------------------
-    stream.listen((dados) {
-      _controler.add(dados);
-    });
-//---------------------------
-    return const Stream.empty();
-  }
+//     if (_itemSelecionadoEstado != null) {
+//       query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
+//     }
+//     if (_itemSelecionadoCategoria != null) {
+//       query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
+//     }
+//     if (_itemSelecionadoVans != null) {
+//       query = query.where("vans", isEqualTo: _itemSelecionadoVans);
+//     }
+//     Stream<QuerySnapshot> stream = query.snapshots();
+// //--------------------
+//     stream.listen((dados) {
+//       _controler.add(dados);
+//     });
+// //---------------------------
+//     return const Stream.empty();
+//   }
 
   //---------------------------------------------------------------------------------------
   @override
@@ -118,7 +108,7 @@ class _AnunciosState extends State<Anuncios> {
     _carregarItensDropdown();
 
     _verificarUsuarioLogado();
-    _adicionarListenerAnuncios();
+    // _adicionarListenerAnuncios();
   }
 
   @override
@@ -168,7 +158,7 @@ class _AnunciosState extends State<Anuncios> {
                       onChanged: (estado) {
                         setState(() {
                           _itemSelecionadoEstado = estado!;
-                          _filtrarAnuncios();
+                          // _filtrarAnuncios();
                         });
                       }),
                 ),
@@ -189,7 +179,7 @@ class _AnunciosState extends State<Anuncios> {
                       onChanged: (categoria) {
                         setState(() {
                           _itemSelecionadoCategoria = categoria!;
-                          _filtrarAnuncios();
+                          // _filtrarAnuncios();
                         });
                       }),
                 ),
@@ -220,9 +210,10 @@ class _AnunciosState extends State<Anuncios> {
           ),
 
           //Listas de anúncios exibicão dos dados
-          StreamBuilder(
-              stream: _controler.stream,
+          StreamBuilder<QuerySnapshot<Anuncio>>(
+              stream: _controler,
               builder: (context, snapshot) {
+
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
@@ -230,8 +221,10 @@ class _AnunciosState extends State<Anuncios> {
                     
                   case ConnectionState.active:
                   case ConnectionState.done:
-                    QuerySnapshot<Object?>? querySnapshot = snapshot.data;
-                    if (querySnapshot == null) {
+
+                    listaAnuncios = snapshot.data!.docs.map((e) => e.data()).toList();
+
+                    if (listaAnuncios.isEmpty) {
                       return Container(
                         padding: const EdgeInsets.all(25),
                         child: const Text(
@@ -242,22 +235,18 @@ class _AnunciosState extends State<Anuncios> {
                     }
                     return Expanded(
                       child: ListView.builder(
-                          itemCount: querySnapshot.docs.length,
+                          itemCount: listaAnuncios.length,
                           itemBuilder: (_, indice) {
-                            List<DocumentSnapshot> anuncios =
-                                querySnapshot.docs.toList();
-                            DocumentSnapshot documentSnapshot =
-                                anuncios[indice];
-                            Anuncio anuncio =
-                                Anuncio.fromDocumentSnapshot(documentSnapshot);
+
+                          //  print(listaAnuncios[indice].descricao);
 
                             return ItemAnuncio(
-                                anuncio: anuncio,
+                                anuncio: listaAnuncios[indice],
                                 onTapItem: () {
-                                  Navigator.pushNamed(
-                                      context, "/detalhes-anuncio",
-                                      arguments:
-                                          anuncio); //--------------------------
+                                  Navigator.push(
+                                      context, MaterialPageRoute<void>(
+      builder: (BuildContext context) => DetalhesAnuncio(anuncio: listaAnuncios[indice],),
+    ),); //--------------------------
                                   //DetalhesAnuncio();
                                 },
                                 onPressedRemover: () {});

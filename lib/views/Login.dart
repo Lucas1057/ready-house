@@ -1,3 +1,5 @@
+
+
 // ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names
 
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class _LoginState extends State<Login> {
       TextEditingController(text: "exemplo@gmail.com");
   final TextEditingController _controllerSenha =
       TextEditingController(text: "1234567");
+  
 
   bool _cadastrar = false;
   String _mensagemErro = "";
@@ -30,8 +33,12 @@ class _LoginState extends State<Login> {
         .createUserWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
         .then((FirebaseUser) {
+        
       //redirecionar a tela principal
       Navigator.pushReplacementNamed(context, "/");
+       
+      
+      
     });
   }
 
@@ -43,7 +50,13 @@ class _LoginState extends State<Login> {
             email: usuario.email, password: usuario.senha)
         .then((FirebaseUser) {
       //redirecionar a principal
-      Navigator.pushReplacementNamed(context, "/");
+//-----------------------------------------------------------mudancas para pech
+
+
+
+//-----------------------------------------------------------mudancas para pech
+
+      Navigator.pushReplacementNamed(context, "/l");
     });
   }
 
@@ -51,6 +64,7 @@ class _LoginState extends State<Login> {
     //recuperar dados dos sampos
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
+  
 
     if (email.isNotEmpty && email.contains("@")) {
       if (senha.isNotEmpty && senha.length > 6) {
@@ -137,6 +151,9 @@ class _LoginState extends State<Login> {
               validator: (String) {},
               onSaved: (String) {},
             ),
+            //-------------------------
+            
+            //-----------------------
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               const Text(
                 'Logar',
@@ -167,9 +184,10 @@ class _LoginState extends State<Login> {
                 corTexto: Colors.black87,
                 onPressed: () {
                   _validarCampos();
-                }),
+                })
+                ,const SizedBox(height: 25,),
                 GestureDetector(
-                  child: const Text("Ir para anúncio",style: TextStyle(color: Colors.white),),onTap: (){
+                  child: const Text("Ir para anúncio",style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),onTap: (){
                   Navigator.pushReplacementNamed(context, "/l");
                  },
                 ),
@@ -189,3 +207,6 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+
+

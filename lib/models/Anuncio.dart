@@ -1,82 +1,116 @@
-// ignore_for_file: unnecessary_this, file_names
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+final anuncioRef = FirebaseFirestore.instance
+    .collection("anuncios")
+    .withConverter(
+        fromFirestore: (snapshots, _) => Anuncio.fromJson(snapshots.data()!),
+        toFirestore: (anuncio, _) => anuncio.toMap());
+
 class Anuncio {
-  late String _id;
-  late String _estado;
-  late String _categoria;
-  late String _titulo;
-  late String _preco;
-  late String _telefone;
-  late String _descricao;
-   late List<String> _fotos;
+  String? _id;
+  String? _estado;
+  String? _categoria;
+  String? _titulo;
+  String? _preco;
+  String? _telefone;
+  String? _descricao;
+  List<String>? _fotos;
 
-  Anuncio();
-  Anuncio.fromDocumentSnapshot(DocumentSnapshot documentSnapshot){
+  Anuncio({
+    String? id,
+    String? estado,
+    String? categoria,
+    String? titulo,
+    String? preco,
+    String? telefone,
+    String? descricao,
+      List<String>? fotos,
+  })  : _id = id,
+        _estado = estado,
+        _categoria = categoria,
+        _titulo = titulo,
+        _preco = preco,
+        _telefone = telefone,
+        _descricao = descricao
+  // _fotos = fotos
+  ;
 
-    this.id = documentSnapshot.id;
-    this.estado = documentSnapshot["estado"];
-    this.categoria = documentSnapshot["categoria"];
-    this.titulo = documentSnapshot["titulo"];
-    this.preco = documentSnapshot["preco"];
-    this.telefone = documentSnapshot["telefone"];
-    this.descricao = documentSnapshot["descricao"];
-    this.fotos = List<String>.from(documentSnapshot["fotos"]);
+  Anuncio.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+    id = documentSnapshot.id;
+    estado = documentSnapshot["estado"];
+    categoria = documentSnapshot["categoria"];
+    titulo = documentSnapshot["titulo"];
+    preco = documentSnapshot["preco"];
+    telefone = documentSnapshot["telefone"];
+    descricao = documentSnapshot["descricao"];
+    fotos = List<String>.from(documentSnapshot["fotos"]);
   }
 
-         Anuncio.gerarId() {
+  Anuncio.gerarId() {
     FirebaseFirestore db = FirebaseFirestore.instance;
     CollectionReference anuncios = db.collection("meus_anuncios");
-    this.id = anuncios.doc().id;
+    id = anuncios.doc().id;
     //this._id = anuncios.document().documentID; //--------------------------------------------
-    this._fotos = [];
+  _fotos = [];
 
     // ...
   }
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
-      "id": this.id,
-      "estado": this._estado,
-      "categoria": this._categoria,
-      "titulo": this._titulo,
-      "preco": this._preco,
+      "id": id,
+      "estado": _estado,
+      "categoria": _categoria,
+      "titulo": _titulo,
+      "preco":_preco,
       "telefone": telefone,
-      "descricao": this._descricao,
-      "fotos": this._fotos,
+      "descricao":_descricao,
+      "fotos": _fotos,
     };
     return map;
   }
 
-  List<String> get fotos => this._fotos;
+  List<String> get fotos => _fotos ?? [];
 
-  set fotos(value) => this._fotos = value;
+  set fotos(value) => _fotos = value;
 
-  get categoria => this._categoria;
+  get categoria => _categoria;
 
-  set categoria(value) => this._categoria = value;
+  set categoria(value) => _categoria = value;
 
-  get descricao => this._descricao;
+  get descricao => _descricao;
 
-  set descricao(value) => this._descricao = value;
+  set descricao(value) => _descricao = value;
 
-  get estado => this._estado;
+  get estado => _estado;
 
-  set estado(value) => this._estado = value;
+  set estado(value) => _estado = value;
 
-  get id => this._id;
+  get id => _id;
 
-  set id(value) => this._id = value;
+  set id(value) => _id = value;
 
-  get preco => this._preco;
+  get preco => _preco;
 
-  set preco(value) => this._preco = value;
+  set preco(value) => _preco = value;
 
-  get telefone => this._telefone;
+  get telefone => _telefone;
 
-  set telefone(value) => this._telefone = value;
+  set telefone(value) => _telefone = value;
 
-  get titulo => this._titulo;
+  get titulo => _titulo;
 
-  set titulo(value) => this._titulo = value;
+  set titulo(value) => _titulo = value;
+
+  factory Anuncio.fromJson(Map<String, dynamic> json) {
+    return Anuncio(
+      id: json['id'] ?? "",
+      estado: json['estado'] ?? "",
+      categoria: json['categioria'] ?? "",
+      titulo: json['titulo'] ?? "",
+      preco: json['preco'] ?? "",
+      telefone: json['telefone'] ?? "",
+      descricao: json['descricao'] ?? "",
+       fotos: json['fotos'] == null ? [] : json['fotos'] as List<String>,
+    );
+  }
 }

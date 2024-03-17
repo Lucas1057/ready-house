@@ -6,17 +6,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vendass/main.dart';
-import 'package:vendass/models/Anuncio.dart';
+import 'package:vendass/models/anuncio.dart';
+
 import 'package:vendass/views/item_anuncio.dart';
 
 class MeusAnuncios extends StatefulWidget {
-  const MeusAnuncios({super.key});
+ 
+   const MeusAnuncios({super.key}); 
+    
 
   @override
   State<MeusAnuncios> createState() => _MeusAnunciosState();
 }
 
 class _MeusAnunciosState extends State<MeusAnuncios> {
+  
+  
+  
 
  final _controller = StreamController<QuerySnapshot>.broadcast();
   late String _idUsuarioLogado;
@@ -82,6 +88,7 @@ db.collection("meus_anuncios")
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.signOut();
 
+  
     // ignore: use_build_context_synchronously
     Navigator.pushNamed(context, "/login");
   }
@@ -99,36 +106,44 @@ db.collection("meus_anuncios")
           backgroundColor: temaPadrao.backgroundColor,
           foregroundColor: temaPadrao.foregroundColor,
         ),
-        body:StreamBuilder(
-          stream: _controller.stream,
-          // ignore: non_constant_identifier_names
-          builder: (context, Snapshot) {
-            switch (Snapshot.connectionState) {
+        body: StreamBuilder(
+         stream: _controller.stream,
+       
+         
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
                 return carregandoDados;
-                // ignore: dead_code
-                break;
+                
               case ConnectionState.active:
               case ConnectionState.done:
                 //Exibir mensagem de erro
-                if (Snapshot.hasError)
-                  // ignore: curly_braces_in_flow_control_structures
+                if (snapshot.hasError) {
                   return const Text("Erro ao carregar os dados!");
-                QuerySnapshot/*<Object?>*/? querySnapshot = Snapshot.data;
-                return ListView.builder(
-                    // itemCount: QuerySnapshot.docs.length,//contar a quantidade de documento que tem dentro de querysnapshort
+                }
+                QuerySnapshot<Object>?  querySnapshot = snapshot.data as QuerySnapshot<Object>?;
+                return    ListView.builder(
+                  
+               //     itemCount: QuerySnapshot.docs.length,//contar a quantidade de documento que tem dentro de querysnapshort
+                  
                     itemBuilder: (_, indice) {
-                      List<DocumentSnapshot> anuncios =
-                          querySnapshot!.docs.toList();
-                          DocumentSnapshot documentSnapshot = anuncios[indice];
+// listaAnuncios = snapshot.data!.docs.map((e) => e.data()).toList();
 
-                          Anuncio anuncio = Anuncio.fromDocumentSnapshot(documentSnapshot);//aqui tinha colocado como parametro DocumentSnapshot
+                      List<DocumentSnapshot?> anuncios =
+                          querySnapshot!.docs.toList();
+                           
+                          DocumentSnapshot<Object?>?  documentSnapshot = anuncios[indice] ;
+                       //  print("${ } ----------------------------------------------------------------------------");
+                         Anuncio anuncio = Anuncio.fromDocumentSnapshot(documentSnapshot!);//aqui tinha colocado como parametro DocumentSnapshot
                       return ItemAnuncio(
-                        anuncio: anuncio,// o anuncio fica aqui
+                        
+                       anuncio: anuncio,// o anuncio fica aqui
                         
                         onPressedRemover: () {
+                          
                           showDialog(context: context, builder: (context){
+                            
                             return AlertDialog(
                               title: const Text("Confirmar"),
                               content: const Text("Deseja realmente excluir o anuncio?"),
@@ -147,14 +162,14 @@ db.collection("meus_anuncios")
                               ],
                             );
                           });
-                        }, onTapItem: () {},
+                        }, onTapItem: () {}, 
                       );
                     });
             }
             // ignore: dead_code
             return const SizedBox(height: 100,width: 100);
           }
-          ),
+          ), 
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
            floatingActionButton: FloatingActionButton.extended(
           foregroundColor: temaPadrao.foregroundColor,

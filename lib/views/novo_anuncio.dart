@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:validadores/Validador.dart';
 import 'package:vendass/main.dart';
-import 'package:vendass/models/Anuncio.dart';
+import 'package:vendass/models/anuncio.dart';
 import 'package:vendass/util/Configuracoes.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
 import 'package:vendass/views/widgets/InputCustomizado.dart';

@@ -6,8 +6,9 @@ import 'package:vendass/views/login.dart';
 import 'package:vendass/firebase_options.dart';
 import 'package:vendass/views/map.dart';
 import 'package:vendass/views/meus_anuncios.dart';
+
 import 'package:vendass/views/novo_anuncio.dart';
-import 'package:vendass/views/route_generation.dart';
+
 
 
 ThemeData temaPadraox = ThemeData(
@@ -29,7 +30,7 @@ void main() async {
     title: "Pech   ",
     home: const Anuncios(),
     theme: temaPadraox,
-    initialRoute: "/l",
+    initialRoute: "/login",
     routes: {
       '/l': (context) =>const Anuncios(),
       '/login': (context) => const Login(), //modificacao
@@ -40,7 +41,7 @@ void main() async {
       '/detalhes-anuncio': (context) =>   DetalhesAnuncio(),
        '/map': (context) =>  const Maps(),
     },
-    onGenerateRoute: RouteGeneration.generateRoute,
+   /*  onGenerateRoute: RouteGeneration.generateRoute, */
   ));
 }
    

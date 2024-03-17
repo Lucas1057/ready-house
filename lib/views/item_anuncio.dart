@@ -1,36 +1,41 @@
-// ignore_for_file: file_names
+
+
+// ignore_for_file: unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import 'package:vendass/models/Anuncio.dart';
+import 'package:vendass/models/anuncio.dart';
 
-// ignore: must_be_immutable
+
 class ItemAnuncio extends StatelessWidget {
-  Anuncio anuncio;
-  VoidCallback onTapItem;
-  VoidCallback onPressedRemover;
-  // ignore: use_key_in_widget_constructors
-  ItemAnuncio ({
-    required this.anuncio,
-    required this.onTapItem,
-    required this.onPressedRemover
-  });
+  final Anuncio anuncio;
+  final VoidCallback onTapItem;
+  final VoidCallback onPressedRemover;
+
+  const ItemAnuncio ({super.key, 
+     required this.anuncio,
+     required this.onTapItem,
+      required this.onPressedRemover 
+   
+    });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTapItem,//this.onTapItem
+      onTap: onTapItem, //this.onTapItem,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
               //Imagem
-              SizedBox(
+               SizedBox(
                 width: 120,
                 height: 120,
-                child: Image.network(anuncio.fotos[0] ,fit: BoxFit.cover,),
+                child: Container(color: Colors.orange,
+                child: anuncio.fotos[0]== null ? Image.network("https://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem.jpeg"):Image.network(anuncio.fotos[0],fit: BoxFit.cover,),),
+              //   child: anuncio.fotos[0] == null ? Container() :Image.network(anuncio.fotos[0] ,fit: BoxFit.cover,),
                 
-              ),
+               ),
               //Titulo e preco
               Expanded(
                 flex: 3,
@@ -44,19 +49,25 @@ class ItemAnuncio extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      Text("R\$ ${anuncio.preco}")
+                      Text(" ${anuncio.preco}")
                     ],
                   ),
                 ),
               ),
-              // ignore: unnecessary_null_comparison
+              
               if(onPressedRemover != null)  Expanded(//this.onPressedRemover
                 flex: 1,
-                child: ElevatedButton(
-                  onPressed: onPressedRemover,//this.onPressedRemover
-                  child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(Icons.delete),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FloatingActionButton(
+                    backgroundColor:  Colors.red,
+                  
+                    onPressed: onPressedRemover,//this.onPressedRemover
+                    child: const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Icon(Icons.delete,color: Colors.white),
+                      
+                    ),
                   ),
                 ),
               )

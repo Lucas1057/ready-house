@@ -1,3 +1,5 @@
+
+
 // ignore_for_file: must_be_immutable
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -5,23 +7,27 @@ import 'package:flutter/material.dart';
 
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vendass/main.dart';
-import 'package:vendass/models/Anuncio.dart';
+import 'package:vendass/models/anuncio.dart';
 
 class DetalhesAnuncio extends StatefulWidget {
-  late Anuncio anuncio;
+    Anuncio? anuncio;
+    
 
-  DetalhesAnuncio({super.key});
+DetalhesAnuncio({super.key, this.anuncio});
+  
 
   @override
   State<DetalhesAnuncio> createState() => _DetalhesAnuncioState();
 }
 
 class _DetalhesAnuncioState extends State<DetalhesAnuncio> {
-  Anuncio? _anuncio;
-  // List<String>urls = ["https://images.creativemarket.com/0.1.0/ps/520037/1360/1234/m1/fpnw/wm1/jqnlos5tllcpu597jp2ynvmn2ismyuajq9yfpiuo3mrax8lpppafqczudweqpypz-.jpg?1434009176&s=2a672b5af2969671634b11eb8196e7b1",];
+  
+   Anuncio? _anuncio;
+   
+  //List<String>urls = ["https://images.creativemarket.com/0.1.0/ps/520037/1360/1234/m1/fpnw/wm1/jqnlos5tllcpu597jp2ynvmn2ismyuajq9yfpiuo3mrax8lpppafqczudweqpypz-.jpg?1434009176&s=2a672b5af2969671634b11eb8196e7b1",];
 
-  List<Widget> _getListaImagens() {
-    List<String> listaUrlImagns = _anuncio!.fotos;
+ List<Widget> _getListaImagens() {
+   List<String> listaUrlImagns = /* _anuncio!.fotos;  */["https://images.creativemarket.com/0.1.0/ps/520037/1360/1234/m1/fpnw/wm1/jqnlos5tllcpu597jp2ynvmn2ismyuajq9yfpiuo3mrax8lpppafqczudweqpypz-.jpg?1434009176&s=2a672b5af2969671634b11eb8196e7b1"]; 
     return listaUrlImagns.map((url) {
       return Container(
         decoration: BoxDecoration(
@@ -43,47 +49,48 @@ if(await canLaunchUrlString("tel: $telefone")){
   @override
   void initState() {
     super.initState();
-    //_anuncio = widget.anuncio == null ? Anuncio() : widget.anuncio!;
+   //_anuncio = widget.anuncio == null ? Anuncio() : widget.anuncio!;
     _anuncio = widget.anuncio;
+   
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Detalhes do Anuncio",
+      appBar: AppBar(iconTheme: const IconThemeData(size: 30,color: Colors.white30),title:const Text("Detalhes do Anuncio",
             style: TextStyle(
               color: Colors.white,
-            )),
-       // foregroundColor: temaPadrao.primaryColor,
-         // backgroundColor: temaPadrao.primaryColor,
-      ),
+            ), 
+            ) ,backgroundColor: Colors.black,),
+        backgroundColor: Colors.white30,
+       
       body: Stack(
         children: [
           //Conteudos
           ListView(
             children: <Widget>[
-              const Text('aqui'),
+              
               SizedBox(
                   height: 250,
                   child: CarouselSlider(
                     options: CarouselOptions(
-                      height: 8,
+                      height: 300,
                       autoPlay: false,
                     ),
                     items: _getListaImagens(),
                   )),
-              Container(
+              Container(color: Colors.black26,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "${_anuncio?.preco}",
-                      style: TextStyle(
+                      style:  TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: temaPadrao.foregroundColor),
+                          color: Colors.blue[900]),
+
                     ),
                     Text(
                       "${_anuncio?.titulo}",
@@ -121,6 +128,13 @@ if(await canLaunchUrlString("tel: $telefone")){
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                        Text(
+                      "${_anuncio?.telefone}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        
+                      ),
+                    ),
                    const Padding(padding:EdgeInsets.only(bottom: 66))
                   ],
                 ),
@@ -145,7 +159,7 @@ if(await canLaunchUrlString("tel: $telefone")){
                   ),
                 ),
                 onTap: () {
-                  _ligarTelefone(_anuncio!.telefone);
+                  _ligarTelefone(_anuncio?.telefone);
                 },
               ))
         ],
