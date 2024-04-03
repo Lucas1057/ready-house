@@ -32,8 +32,11 @@ class ItemAnuncio extends StatelessWidget {
                 width: 120,
                 height: 120,
                 child: Container(color: Colors.orange,
-                child: anuncio.fotos[0]== null ? Image.network("https://www.tribunadeituverava.com.br/wp-content/uploads/2017/12/sem-foto-sem-imagem.jpeg"):Image.network(anuncio.fotos[0],fit: BoxFit.cover,),),
-              //   child: anuncio.fotos[0] == null ? Container() :Image.network(anuncio.fotos[0] ,fit: BoxFit.cover,),
+                  child: anuncio.fotos[0]== null ? Image.network("https://www.malhariapradense.com.br/wp-content/uploads/2017/08/produto-sem-imagem.png"):Image.network(anuncio.fotos[0],fit: BoxFit.cover,), 
+                  // child: anuncio.fotos[0] == null ? Container() :Image.network(anuncio.fotos[0] ,fit: BoxFit.cover,), 
+                
+                 
+                 ),
                 
                ),
               //Titulo e preco

@@ -27,7 +27,7 @@ class _DetalhesAnuncioState extends State<DetalhesAnuncio> {
   //List<String>urls = ["https://images.creativemarket.com/0.1.0/ps/520037/1360/1234/m1/fpnw/wm1/jqnlos5tllcpu597jp2ynvmn2ismyuajq9yfpiuo3mrax8lpppafqczudweqpypz-.jpg?1434009176&s=2a672b5af2969671634b11eb8196e7b1",];
 
  List<Widget> _getListaImagens() {
-   List<String> listaUrlImagns = /* _anuncio!.fotos;  */["https://images.creativemarket.com/0.1.0/ps/520037/1360/1234/m1/fpnw/wm1/jqnlos5tllcpu597jp2ynvmn2ismyuajq9yfpiuo3mrax8lpppafqczudweqpypz-.jpg?1434009176&s=2a672b5af2969671634b11eb8196e7b1"]; 
+   List<String> listaUrlImagns =  _anuncio!.fotos ; // ["https://images.creativemarket.com/0.1.0/ps/520037/1360/1234/m1/fpnw/wm1/jqnlos5tllcpu597jp2ynvmn2ismyuajq9yfpiuo3mrax8lpppafqczudweqpypz-.jpg?1434009176&s=2a672b5af2969671634b11eb8196e7b1"]; 
     return listaUrlImagns.map((url) {
       return Container(
         decoration: BoxDecoration(
@@ -35,9 +35,7 @@ class _DetalhesAnuncioState extends State<DetalhesAnuncio> {
                 image: NetworkImage(url), fit: BoxFit.fitWidth)),
       ); //Image.network(url);
     }).toList();
-    //widget.anuncio.fotos;
-
-    // throw(); usado quando tiver dando erro
+  
   }
 _ligarTelefone(String telefone)async{
 if(await canLaunchUrlString("tel: $telefone")){

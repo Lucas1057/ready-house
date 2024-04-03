@@ -95,6 +95,8 @@ db.collection("meus_anuncios")
 
   @override
   Widget build(BuildContext context) {
+
+    
     var carregandoDados = const Center(
       child: Column(
         children: [Text("Carregando anúncios"), CircularProgressIndicator()],
@@ -125,7 +127,7 @@ db.collection("meus_anuncios")
                 QuerySnapshot<Object>?  querySnapshot = snapshot.data as QuerySnapshot<Object>?;
                 return    ListView.builder(
                   
-               //     itemCount: QuerySnapshot.docs.length,//contar a quantidade de documento que tem dentro de querysnapshort
+                   itemCount: querySnapshot?.docs.length,//contar a quantidade de documento que tem dentro de querysnapshort
                   
                     itemBuilder: (_, indice) {
 // listaAnuncios = snapshot.data!.docs.map((e) => e.data()).toList();

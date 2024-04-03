@@ -1,12 +1,10 @@
-
-
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vendass/main.dart';
 import 'package:vendass/models/anuncio.dart';
-import 'package:vendass/util/Configuracoes.dart';
+/* import 'package:vendass/util/Configuracoes.dart'; */
 import 'package:vendass/views/detalhes_anuncio.dart';
 import 'package:vendass/views/item_anuncio.dart';
 
@@ -20,15 +18,15 @@ class Anuncios extends StatefulWidget {
 class _AnunciosState extends State<Anuncios> {
   List<String> itensMenu = [];
 
-  late List<Anuncio> listaAnuncios = [];
+   List<Anuncio> listaAnuncios = [];
 
-  late List<DropdownMenuItem<String>> _listaItensDropCategorias;
-  late List<DropdownMenuItem<String>> _listaItensDropEstados;
+  /* late List<DropdownMenuItem<String>> _listaItensDropCategorias;
+  late List<DropdownMenuItem<String>> _listaItensDropEstados; */
   //late List<DropdownMenuItem<String>> _listaItensDropVans;
 
   final Stream<QuerySnapshot<Anuncio>> _controler = anuncioRef.snapshots();
-  String? _itemSelecionadoEstado;
-  String? _itemSelecionadoCategoria;
+ /*  String? _itemSelecionadoEstado;
+  String? _itemSelecionadoCategoria; */
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {
       case "Meus anúncios":
@@ -67,7 +65,7 @@ class _AnunciosState extends State<Anuncios> {
     }
   }
 
-  _carregarItensDropdown() {
+  /* _carregarItensDropdown() {
     //Categoria
     _listaItensDropCategorias = Configuracoes.getCategorias();
     //Estados
@@ -75,7 +73,7 @@ class _AnunciosState extends State<Anuncios> {
     _listaItensDropEstados = Configuracoes.getEstados();
     //Vans
     //  _listaItensDropVans = Configuracoes.getVans();
-  }
+  } */
 
   //----------------------------------STREAM BUILDER FILTRAR ANUNCIO
 //   Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
@@ -105,7 +103,7 @@ class _AnunciosState extends State<Anuncios> {
   @override
   void initState() {
     super.initState();
-    _carregarItensDropdown();
+   /*  _carregarItensDropdown(); */
 
     _verificarUsuarioLogado();
     // _adicionarListenerAnuncios();
@@ -143,7 +141,7 @@ class _AnunciosState extends State<Anuncios> {
       body: Column(
         children: [
           //filtros
-          Row(
+          /* Row(
             children: [
               Expanded(
                   child: DropdownButtonHideUnderline(
@@ -207,22 +205,21 @@ class _AnunciosState extends State<Anuncios> {
                 ),
               )),*/
             ],
-          ),
+          ), */
 
           //Listas de anúncios exibicão dos dados
           StreamBuilder<QuerySnapshot<Anuncio>>(
               stream: _controler,
               builder: (context, snapshot) {
-
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
                     return carregandoDados;
-                    
+
                   case ConnectionState.active:
                   case ConnectionState.done:
-
-                    listaAnuncios = snapshot.data!.docs.map((e) => e.data()).toList();
+                    listaAnuncios =
+                        snapshot.data!.docs.map((e) => e.data()).toList();
 
                     if (listaAnuncios.isEmpty) {
                       return Container(
@@ -234,20 +231,22 @@ class _AnunciosState extends State<Anuncios> {
                       );
                     }
                     return Expanded(
-                      child: ListView.builder(
+                      child: ListView.builder( 
                           itemCount: listaAnuncios.length,
                           itemBuilder: (_, indice) {
-
-                          //  print(listaAnuncios[indice].descricao);
-
                             return ItemAnuncio(
                                 anuncio: listaAnuncios[indice],
                                 onTapItem: () {
                                   Navigator.push(
-                                      context, MaterialPageRoute<void>(
-      builder: (BuildContext context) => DetalhesAnuncio(anuncio: listaAnuncios[indice],),
-    ),); //--------------------------
-                                  //DetalhesAnuncio();
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          DetalhesAnuncio(
+                                        anuncio: listaAnuncios[indice],
+                                      ),
+                                    ),
+                                  );
+                                  DetalhesAnuncio();
                                 },
                                 onPressedRemover: () {});
                           }),
@@ -257,7 +256,7 @@ class _AnunciosState extends State<Anuncios> {
               })
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      /* floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
           child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +269,7 @@ class _AnunciosState extends State<Anuncios> {
               ]),
           onPressed: () {
             Navigator.pushNamed(context, "/map");
-          }),
+          }), */
     );
   }
 }

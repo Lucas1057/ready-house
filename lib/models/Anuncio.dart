@@ -14,7 +14,7 @@ class Anuncio {
   String? _preco;
   String? _telefone;
   String? _descricao;
-  List<String>? _fotos;
+  late List<String> _fotos; 
 
   Anuncio({
     String? id,
@@ -31,8 +31,8 @@ class Anuncio {
         _titulo = titulo,
         _preco = preco,
         _telefone = telefone,
-        _descricao = descricao
-  // _fotos = fotos
+        _descricao = descricao,
+         _fotos = fotos!
   ;
 
   Anuncio.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
@@ -43,7 +43,7 @@ class Anuncio {
     preco = documentSnapshot["preco"];
     telefone = documentSnapshot["telefone"];
     descricao = documentSnapshot["descricao"];
-    fotos = List<String>.from(documentSnapshot["fotos"]);
+     fotos = List<String>.from(documentSnapshot["fotos"]); 
   }
 
   Anuncio.gerarId() {
@@ -64,12 +64,12 @@ class Anuncio {
       "preco":_preco,
       "telefone": telefone,
       "descricao":_descricao,
-      "fotos": _fotos,
+       "fotos": _fotos, 
     };
     return map;
   }
 
-  List<String> get fotos => _fotos ?? [];
+  List<String> get fotos => _fotos;/* ?? */ 
 
   set fotos(value) => _fotos = value;
 
@@ -110,7 +110,11 @@ class Anuncio {
       preco: json['preco'] ?? "",
       telefone: json['telefone'] ?? "",
       descricao: json['descricao'] ?? "",
-       fotos: json['fotos'] == null ? [] : json['fotos'] as List<String>,
+        // fotos: json['fotos'] == null ? [] : json['fotos'].map((e)=> e).toList(), 
+        fotos: (json['fotos'] as List<dynamic>?)
+    ?.map((foto) => foto as String)
+    .toList() ?? [],
+
     );
   }
 }
