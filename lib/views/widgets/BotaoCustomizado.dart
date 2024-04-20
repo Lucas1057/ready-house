@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class BotaoCustomizado extends StatelessWidget {
   final String texto;
   final Color corTexto;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const BotaoCustomizado(
       {required this.texto,
       this.corTexto = Colors.white24,
-      required this.onPressed});
+       this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -11,6 +11,7 @@ import 'package:vendass/views/widgets/BotaoCustomizado.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
+ 
 
   @override
   State<Login> createState() => _LoginState();
@@ -66,8 +67,8 @@ class _LoginState extends State<Login> {
     String senha = _controllerSenha.text;
   
 
-    if (email.isNotEmpty && email.contains("@")) {
-      if (senha.isNotEmpty && senha.length > 6) {
+    if (email.isNotEmpty && email.contains("@") ) {
+      if (senha.isNotEmpty && senha.length > 6 ) {
 //Configura usuarrio
         Usuario usuario = Usuario();
         usuario.email = email;
@@ -97,15 +98,16 @@ class _LoginState extends State<Login> {
   //bool _logar = true;
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       appBar: AppBar(
         foregroundColor: temaPadrao.foregroundColor,
-        backgroundColor: temaPadrao.backgroundColor,
+        backgroundColor: temaPadraox.primaryColor,
         title: const Text(
-          'Pech',
+          'READY HOUSE',
         ),
       ),
-      backgroundColor: Colors.white10,
+      backgroundColor: temaPadrao.backgroundColor,
       body: Container(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -115,25 +117,23 @@ class _LoginState extends State<Login> {
             const Padding(
               padding: EdgeInsets.only(bottom: 32),
               child: Padding(
-                padding: EdgeInsets.all(50.0),
+                padding: EdgeInsets.all(40.0),
                 child: Center(
                     child: Text(
-                  "PECH",
+                  "READY HOUSE",
                   style: TextStyle(
                       color: Colors.white60,
                       fontSize: 40,
                       fontWeight: FontWeight.bold),
                 )),
-              ), /* Image.asset(
-                  "imagens/logo.png",
-                  width: 2,
-                  height: 150,
-                ),*/
+              ),
             ),
             InputCustomizado(
               controller: _controllerEmail,
               hint: "E-mail",
+              obscure: false,
               autofocus: true,
+              
               type: TextInputType.emailAddress,
               inputFormatters: const [],
               maxLines: 1,
@@ -146,15 +146,17 @@ class _LoginState extends State<Login> {
               hint: "Senha",
               obscure: true,
               type: TextInputType.text,
+              
               inputFormatters: const [],
               maxLines: 1,
               validator: (String) {},
               onSaved: (String) {},
             ),
             //-------------------------
-            
+             
             //-----------------------
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              
               const Text(
                 'Logar',
                 style: TextStyle(color: Colors.white),

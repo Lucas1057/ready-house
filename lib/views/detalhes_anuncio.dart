@@ -4,8 +4,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vendass/main.dart';
 import 'package:vendass/models/anuncio.dart';
 
@@ -14,6 +13,7 @@ class DetalhesAnuncio extends StatefulWidget {
     
 
 DetalhesAnuncio({super.key, this.anuncio});
+
   
 
   @override
@@ -37,13 +37,26 @@ class _DetalhesAnuncioState extends State<DetalhesAnuncio> {
     }).toList();
   
   }
-_ligarTelefone(String telefone)async{
+/* _ligarTelefone(String telefone)async{
 if(await canLaunchUrlString("tel: $telefone")){
   await launchUrlString(telefone);
 }else {
  "Não pode fazer a ligação";
 }
+} */
+
+void _whatsapp(String telefone/* {required String phoneNumber} */)async{
+String url = "https://wa.me/${_anuncio?.telefone }?text=ola+tudo+bem";
+
+try {
+    await launchUrl(Uri.parse(url));
+} catch (e) {
+  throw 'Coul not lauch $url';
 }
+  
+}
+
+
   @override
   void initState() {
     super.initState();
@@ -59,8 +72,8 @@ if(await canLaunchUrlString("tel: $telefone")){
             style: TextStyle(
               color: Colors.white,
             ), 
-            ) ,backgroundColor: Colors.black,),
-        backgroundColor: Colors.white30,
+            ) ,backgroundColor: temaPadraox.primaryColor,),
+        backgroundColor: const Color(0xFFECE5DF),
        
       body: Stack(
         children: [
@@ -139,7 +152,7 @@ if(await canLaunchUrlString("tel: $telefone")){
               )
             ],
           ),
-          //Botão ligar
+          //Botão whatsApp
           Positioned(
               left: 16,
               right: 16,
@@ -152,12 +165,14 @@ if(await canLaunchUrlString("tel: $telefone")){
                       color: temaPadrao.backgroundColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: const Text(
-                    "Ligar",
+                    "WhatsApp",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 onTap: () {
-                  _ligarTelefone(_anuncio?.telefone);
+                  /* _ligarTelefone(_anuncio?.telefone); */
+                 _whatsapp(_anuncio?.telefone);
+                 
                 },
               ))
         ],

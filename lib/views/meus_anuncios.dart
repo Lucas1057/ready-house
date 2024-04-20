@@ -68,7 +68,7 @@ db.collection("meus_anuncios")
     _adicionarListenerAnuncios();
   }
 
-  List<String> itensMenu = ["menu", "menives"];
+  List<String> itensMenu = [];
   // ignore: unused_element
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {

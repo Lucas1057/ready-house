@@ -50,10 +50,9 @@ class Anuncio {
     FirebaseFirestore db = FirebaseFirestore.instance;
     CollectionReference anuncios = db.collection("meus_anuncios");
     id = anuncios.doc().id;
-    //this._id = anuncios.document().documentID; //--------------------------------------------
   _fotos = [];
 
-    // ...
+    
   }
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {

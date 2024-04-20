@@ -1,21 +1,20 @@
-// ignore_for_file: file_names, sort_child_properties_last, avoid_unnecessary_containers
+
 
 import 'dart:io';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:validadores/Validador.dart';
 import 'package:vendass/main.dart';
 import 'package:vendass/models/anuncio.dart';
-import 'package:vendass/util/Configuracoes.dart';
+import 'package:vendass/util/configuracoes.dart';
 import 'package:vendass/views/widgets/BotaoCustomizado.dart';
 import 'package:vendass/views/widgets/InputCustomizado.dart';
+
 
 class NovoAnuncio extends StatefulWidget {
   const NovoAnuncio({super.key});
@@ -25,11 +24,11 @@ class NovoAnuncio extends StatefulWidget {
 }
 
 class _NovoAnuncioState extends State<NovoAnuncio> {
-  // ignore: prefer_final_fields
-  List<File> _listaImagens = [];
-  // ignore: prefer_final_fields
+ 
+  final List<File> _listaImagens = [];
+ 
   List<DropdownMenuItem<String>> _listaItensDropEstados = [];
-  // ignore: prefer_final_fields
+  
   List<DropdownMenuItem<String>> _listaItensDropCategorias = [];
   final _formKey = GlobalKey<FormState>();
   late Anuncio _anuncio;
@@ -39,13 +38,13 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
 
   ImagePicker imagePicker = ImagePicker();
 
-  // ignore: unused_element
+
   _selecionarImagemGaleria() async {
     XFile? imagemEscolhida =
         await imagePicker.pickImage(source: ImageSource.gallery);
 
     File arquivoImagem = File(imagemEscolhida!
-        .path); //---------------------------aqui onde resolvi o erro
+        .path);
 
     setState(() {
       _listaImagens.add(arquivoImagem);
@@ -73,13 +72,13 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
     _abrirDialog(_dialogContext);
     //upload imagens no storage
     await _uploadImagens();
-    //print("LISTA IMAGENS: ${_anuncio.fotos.toString()}");
+    
 
     //salvar anuncio no firestore
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseFirestore db = FirebaseFirestore.instance;
-    // ignore: unused_local_variable, await_only_futures
-    User usuarioLogado = await auth.currentUser!;
+   
+    User usuarioLogado = auth.currentUser!;
     String idUsuarioLogadoo = usuarioLogado.uid;
     db
         .collection("meus_anuncios")
@@ -116,6 +115,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
   }
 
   ///controler
+  
   // ignore: unused_field
   final TextEditingController _controllerEstado = TextEditingController();
   // ignore: unused_field
@@ -161,9 +161,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   //lista de imagem
                   initialValue: _listaImagens,
                   validator: (imagens) {
-                    //imagens.length
-                    // ignore: prefer_is_empty
-                    if (imagens!.length == 0) {
+             
+                    if (imagens!.isEmpty) {
                       return "Necessario selecionar uma imagem!";
                     }
                     return null;
@@ -172,8 +171,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   builder: (state) {
                     return Column(
                       children: [
-                        // ignore: sized_box_for_whitespace
-                        Container(
+                      
+                        SizedBox(
                           height: 100,
                           child: ListView.builder(
                               //construir o listview
@@ -192,10 +191,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                       child: CircleAvatar(
                                         backgroundColor: Colors.grey[400],
                                         radius: 50,
-                                        //backgroundImage: imageFile != null
-                                        // ? FileImage(imageFile!)
-                                        //: null,
-                                        child: Column(
+                                          child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
@@ -213,8 +209,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                                     ),
                                   );
                                 }
-                                // ignore: prefer_is_empty
-                                if (_listaImagens.length > 0) {
+                              
+                                if (_listaImagens.isNotEmpty) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
@@ -271,12 +267,10 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                               }),
                         ),
                         if (state.hasError)
-                          Container(
-                            child: Text(
-                              "[${state.errorText}]",
-                              style: const TextStyle(
-                                  color: Colors.red, fontSize: 14),
-                            ),
+                          Text(
+                            "[${state.errorText}]",
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 14),
                           )
                       ],
                     );
@@ -336,6 +330,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                   padding: const EdgeInsets.only(bottom: 15),
                   child: InputCustomizado(
                     hint: "Título",
+                    obscure: false,
                     onSaved: (titulo) {
                       _anuncio.titulo = titulo;
                     },
@@ -344,15 +339,16 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                           .add(Validar.OBRIGATORIO, msg: "campo obrigatório")
                           .valido(valor);
                     },
-                    controller: _controllerPreco,
+                    controller: _controllerTitulo,
                     inputFormatters: const [],
                     maxLines: 1,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15),
-                  child: InputCustomizado(
+                  child: InputCustomizado( 
                     hint: "Preço",
+                    obscure: false,
                     type: TextInputType.number,
                     onSaved: (preco) {
                       _anuncio.preco = preco;
@@ -362,10 +358,11 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                           .add(Validar.OBRIGATORIO, msg: "campo obrigatório")
                           .valido(valor);
                     },
-                    controller: _controllerTitulo,
-                    inputFormatters: [
+                    controller: _controllerPreco,
+                   inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      RealInputFormatter(moeda: true)
+                      /* RealInputFormatter(moeda: true), */
+                      CentavosInputFormatter(moeda: true)
                     ],
                     maxLines: 1,
                   ),
@@ -373,7 +370,8 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: InputCustomizado(
-                    hint: "Telefone",
+                    hint: "WhatsApp",
+                    obscure: false,
                     type: TextInputType.phone,
                     onSaved: (telefone) {
                       _anuncio.telefone = telefone;
@@ -388,13 +386,14 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                       FilteringTextInputFormatter.digitsOnly,
                       TelefoneInputFormatter()
                     ],
-                    maxLines: 1,
+                    maxLines:  1,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: InputCustomizado(
                     hint: "Descrição (200 caracteres)",
+                    obscure: false,
                     onSaved: (descricao) {
                       _anuncio.descricao = descricao;
                     },

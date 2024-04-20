@@ -20,13 +20,8 @@ class _AnunciosState extends State<Anuncios> {
 
    List<Anuncio> listaAnuncios = [];
 
-  /* late List<DropdownMenuItem<String>> _listaItensDropCategorias;
-  late List<DropdownMenuItem<String>> _listaItensDropEstados; */
-  //late List<DropdownMenuItem<String>> _listaItensDropVans;
-
   final Stream<QuerySnapshot<Anuncio>> _controler = anuncioRef.snapshots();
- /*  String? _itemSelecionadoEstado;
-  String? _itemSelecionadoCategoria; */
+
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {
       case "Meus anúncios":
@@ -65,55 +60,23 @@ class _AnunciosState extends State<Anuncios> {
     }
   }
 
-  /* _carregarItensDropdown() {
-    //Categoria
-    _listaItensDropCategorias = Configuracoes.getCategorias();
-    //Estados
-
-    _listaItensDropEstados = Configuracoes.getEstados();
-    //Vans
-    //  _listaItensDropVans = Configuracoes.getVans();
-  } */
-
-  //----------------------------------STREAM BUILDER FILTRAR ANUNCIO
-//   Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
-//     FirebaseFirestore db = FirebaseFirestore.instance;
-
-//     Query query = db.collection("anuncios");
-
-//     if (_itemSelecionadoEstado != null) {
-//       query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
-//     }
-//     if (_itemSelecionadoCategoria != null) {
-//       query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
-//     }
-//     if (_itemSelecionadoVans != null) {
-//       query = query.where("vans", isEqualTo: _itemSelecionadoVans);
-//     }
-//     Stream<QuerySnapshot> stream = query.snapshots();
-// //--------------------
-//     stream.listen((dados) {
-//       _controler.add(dados);
-//     });
-// //---------------------------
-//     return const Stream.empty();
-//   }
-
   //---------------------------------------------------------------------------------------
   @override
   void initState() {
     super.initState();
-   /*  _carregarItensDropdown(); */
+  
 
     _verificarUsuarioLogado();
-    // _adicionarListenerAnuncios();
+   
   }
 
   @override
   Widget build(BuildContext context) {
     var carregandoDados = const Center(
       child: Column(
-        children: [Text("Carregando ánunioss"), CircularProgressIndicator()],
+        children: [
+          Text("Carregando ánunioss"), 
+          CircularProgressIndicator()],
       ),
     );
     return Scaffold(
@@ -121,7 +84,7 @@ class _AnunciosState extends State<Anuncios> {
         backgroundColor: temaPadrao.backgroundColor,
         foregroundColor: temaPadrao.foregroundColor,
         title: const Text(
-          "PECH",
+          "READY HOUSE",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0,
@@ -140,72 +103,7 @@ class _AnunciosState extends State<Anuncios> {
       ),
       body: Column(
         children: [
-          //filtros
-          /* Row(
-            children: [
-              Expanded(
-                  child: DropdownButtonHideUnderline(
-                child: Center(
-                  child: DropdownButton(
-                      iconEnabledColor: const Color(0xff9c27b0),
-                      dropdownColor: Colors.amber,
-                      value:
-                          _itemSelecionadoEstado, // esse erro aqui initialied
-                      items: _listaItensDropEstados,
-                      style: const TextStyle(fontSize: 22, color: Colors.black),
-                      onChanged: (estado) {
-                        setState(() {
-                          _itemSelecionadoEstado = estado!;
-                          // _filtrarAnuncios();
-                        });
-                      }),
-                ),
-              )),
-              Container(
-                color: Colors.grey[200],
-                width: 2,
-                height: 60,
-              ),
-              Expanded(
-                  child: DropdownButtonHideUnderline(
-                child: Center(
-                  child: DropdownButton(
-                      iconEnabledColor: const Color(0xff9c27b0),
-                      value: _itemSelecionadoCategoria,
-                      items: _listaItensDropCategorias,
-                      style: const TextStyle(fontSize: 22, color: Colors.black),
-                      onChanged: (categoria) {
-                        setState(() {
-                          _itemSelecionadoCategoria = categoria!;
-                          // _filtrarAnuncios();
-                        });
-                      }),
-                ),
-              )),
-              Container(
-                color: Colors.grey[200],
-                width: 2,
-                height: 60,
-              ),
-              /* Expanded(
-                  child: DropdownButtonHideUnderline(
-                child: Center(
-                  child: DropdownButton(
-                      iconEnabledColor: const Color(0xff9c27b0),
-                      value: _itemSelecionadoVans,
-                      items: _listaItensDropVans,
-                      style:
-                          const TextStyle(fontSize: 22, color: Colors.black),
-                      onChanged: (vans) {
-                        setState(() {
-                          _itemSelecionadoVans = vans!;
-                          _filtrarAnuncios();
-                        });
-                      }),
-                ),
-              )),*/
-            ],
-          ), */
+        
 
           //Listas de anúncios exibicão dos dados
           StreamBuilder<QuerySnapshot<Anuncio>>(
@@ -248,28 +146,16 @@ class _AnunciosState extends State<Anuncios> {
                                   );
                                   DetalhesAnuncio();
                                 },
-                                onPressedRemover: () {});
+                               /*  onPressedRemover: () {} */
+                               );
                           }),
                     );
                 }
-                //return Container();
+                
               })
         ],
       ),
-      /* floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.black,
-          child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transporte",
-                  style: TextStyle(color: Colors.white, fontSize: 8),
-                ),
-                Icon(Icons.car_crash_rounded, color: Colors.white),
-              ]),
-          onPressed: () {
-            Navigator.pushNamed(context, "/map");
-          }), */
+    
     );
   }
 }

@@ -8,13 +8,13 @@ import 'package:vendass/models/anuncio.dart';
 
 class ItemAnuncio extends StatelessWidget {
   final Anuncio anuncio;
-  final VoidCallback onTapItem;
-  final VoidCallback onPressedRemover;
+  final VoidCallback? onTapItem;
+  final VoidCallback? onPressedRemover;
 
   const ItemAnuncio ({super.key, 
      required this.anuncio,
-     required this.onTapItem,
-      required this.onPressedRemover 
+      this.onTapItem,
+       this.onPressedRemover 
    
     });
 

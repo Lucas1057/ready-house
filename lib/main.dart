@@ -4,20 +4,19 @@ import 'package:vendass/views/anuncios.dart';
 import 'package:vendass/views/detalhes_anuncio.dart';
 import 'package:vendass/views/login.dart';
 import 'package:vendass/firebase_options.dart';
-import 'package:vendass/views/map.dart';
 import 'package:vendass/views/meus_anuncios.dart';
-
 import 'package:vendass/views/novo_anuncio.dart';
 
 
 
 ThemeData temaPadraox = ThemeData(
-  primaryColor: Colors.black,//const Color(0xff9c27b0),
-);
-AppBarTheme temaPadrao= const AppBarTheme(
-  backgroundColor: Colors.black87,
+  primaryColor: const Color(0xFF1D361F) //const Color(0xff9c27b0),
+); 
+
+ AppBarTheme temaPadrao= const AppBarTheme(
+  backgroundColor: Color(0xFF859B48), 
   foregroundColor: Colors.white70
-);
+); 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();  
@@ -27,8 +26,8 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: "Pech   ",
-    home: const Anuncios(),
+    title: "READY HOUSE   ",
+    home: const Anuncios(),  
     theme: temaPadraox,
     initialRoute: "/login",
     routes: {
@@ -39,7 +38,7 @@ void main() async {
      // '/foto': (context) => const Foto(), //modificacao
      // '/tela': (context) => Tela_imagem(),
       '/detalhes-anuncio': (context) =>   DetalhesAnuncio(),
-       '/map': (context) =>  const Maps(),
+       
     },
    /*  onGenerateRoute: RouteGeneration.generateRoute, */
   ));
