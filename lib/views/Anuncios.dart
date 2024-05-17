@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vendass/main.dart';
 import 'package:vendass/models/anuncio.dart';
-/* import 'package:vendass/util/Configuracoes.dart'; */
+import 'package:vendass/util/Configuracoes.dart'; 
 import 'package:vendass/views/detalhes_anuncio.dart';
 import 'package:vendass/views/item_anuncio.dart';
 
@@ -20,13 +20,13 @@ class _AnunciosState extends State<Anuncios> {
 
    List<Anuncio> listaAnuncios = [];
 
-  /* late List<DropdownMenuItem<String>> _listaItensDropCategorias;
-  late List<DropdownMenuItem<String>> _listaItensDropEstados; */
-  //late List<DropdownMenuItem<String>> _listaItensDropVans;
+   late List<DropdownMenuItem<String>> _listaItensDropCategorias;
+  late List<DropdownMenuItem<String>> _listaItensDropEstados; 
+ 
 
   final Stream<QuerySnapshot<Anuncio>> _controler = anuncioRef.snapshots();
- /*  String? _itemSelecionadoEstado;
-  String? _itemSelecionadoCategoria; */
+   String? _itemSelecionadoEstado;
+  String? _itemSelecionadoCategoria; 
   _escolhaMenuItem(String itemEscolhido) {
     switch (itemEscolhido) {
       case "Meus anúncios":
@@ -65,46 +65,41 @@ class _AnunciosState extends State<Anuncios> {
     }
   }
 
-  /* _carregarItensDropdown() {
+    _carregarItensDropdown() {
+     
     //Categoria
     _listaItensDropCategorias = Configuracoes.getCategorias();
     //Estados
-
     _listaItensDropEstados = Configuracoes.getEstados();
-    //Vans
-    //  _listaItensDropVans = Configuracoes.getVans();
-  } */
-
+  } 
+ 
   //----------------------------------STREAM BUILDER FILTRAR ANUNCIO
-//   Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
-//     FirebaseFirestore db = FirebaseFirestore.instance;
+   Future<Stream<QuerySnapshot>?> _filtrarAnuncios() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
 
-//     Query query = db.collection("anuncios");
+    Query query = db.collection("anuncios");
 
-//     if (_itemSelecionadoEstado != null) {
-//       query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
-//     }
-//     if (_itemSelecionadoCategoria != null) {
-//       query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
-//     }
-//     if (_itemSelecionadoVans != null) {
-//       query = query.where("vans", isEqualTo: _itemSelecionadoVans);
-//     }
-//     Stream<QuerySnapshot> stream = query.snapshots();
+    if (_itemSelecionadoEstado != null) {
+      query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
+     }
+     if (_itemSelecionadoCategoria != null) {
+       query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
+     }
+    
+     Stream<QuerySnapshot> stream = query.snapshots();
 // //--------------------
-//     stream.listen((dados) {
-//       _controler.add(dados);
-//     });
+     stream.listen((dados) {
+       _controler.any(dados as bool Function(QuerySnapshot<Anuncio> element));
+     });
 // //---------------------------
-//     return const Stream.empty();
-//   }
+     return const Stream.empty();
+  }
 
   //---------------------------------------------------------------------------------------
   @override
   void initState() {
     super.initState();
-   /*  _carregarItensDropdown(); */
-
+     _carregarItensDropdown(); 
     _verificarUsuarioLogado();
     // _adicionarListenerAnuncios();
   }
@@ -126,6 +121,31 @@ class _AnunciosState extends State<Anuncios> {
         ),
         elevation: 0,
         actions: [
+        StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(), // Stream user changes
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data != null) {
+              // User is logged in, show green icon
+              return IconButton(
+                onPressed: () {
+                  // Handle logged-in actions
+                  const SnackBar(content: Text('Voce esta logado'),);
+                },
+                icon: const Icon(Icons.check_circle_outline, color: Colors.green),
+              );
+            } else {
+              // User is logged out, show red icon
+              return IconButton(
+                onPressed: () {
+                  // Handle login flow
+                  _showLoginRequiredDialog(context); 
+                },
+                icon: const Icon(Icons.cancel, color: Colors.red),
+              );
+            }
+          },
+        ),
+         //------------------------------------------------------------
           PopupMenuButton(
               onSelected: _escolhaMenuItem,
               itemBuilder: (context) {
@@ -141,7 +161,7 @@ class _AnunciosState extends State<Anuncios> {
       body: Column(
         children: [
           //filtros
-          /* Row(
+           Row(
             children: [
               Expanded(
                   child: DropdownButtonHideUnderline(
@@ -156,7 +176,7 @@ class _AnunciosState extends State<Anuncios> {
                       onChanged: (estado) {
                         setState(() {
                           _itemSelecionadoEstado = estado!;
-                          // _filtrarAnuncios();
+                           _filtrarAnuncios();
                         });
                       }),
                 ),
@@ -177,7 +197,7 @@ class _AnunciosState extends State<Anuncios> {
                       onChanged: (categoria) {
                         setState(() {
                           _itemSelecionadoCategoria = categoria!;
-                          // _filtrarAnuncios();
+                           _filtrarAnuncios();
                         });
                       }),
                 ),
@@ -187,25 +207,9 @@ class _AnunciosState extends State<Anuncios> {
                 width: 2,
                 height: 60,
               ),
-              /* Expanded(
-                  child: DropdownButtonHideUnderline(
-                child: Center(
-                  child: DropdownButton(
-                      iconEnabledColor: const Color(0xff9c27b0),
-                      value: _itemSelecionadoVans,
-                      items: _listaItensDropVans,
-                      style:
-                          const TextStyle(fontSize: 22, color: Colors.black),
-                      onChanged: (vans) {
-                        setState(() {
-                          _itemSelecionadoVans = vans!;
-                          _filtrarAnuncios();
-                        });
-                      }),
-                ),
-              )),*/
+             
             ],
-          ), */
+          ), 
 
           //Listas de anúncios exibicão dos dados
           StreamBuilder<QuerySnapshot<Anuncio>>(
@@ -218,9 +222,15 @@ class _AnunciosState extends State<Anuncios> {
 
                   case ConnectionState.active:
                   case ConnectionState.done:
-                    listaAnuncios =
-                        snapshot.data!.docs.map((e) => e.data()).toList();
 
+                  if (snapshot.hasError) {
+                return Text('Erro ao carregar dados: ${snapshot.error}');
+                } else {
+                listaAnuncios =
+                snapshot.data!.docs.map((e) => e.data()).toList(); 
+              // ignore: avoid_print
+              print(" o tamanho é ${listaAnuncios.length} ");}
+                    
                     if (listaAnuncios.isEmpty) {
                       return Container(
                         padding: const EdgeInsets.all(25),
@@ -237,7 +247,9 @@ class _AnunciosState extends State<Anuncios> {
                             return ItemAnuncio(
                                 anuncio: listaAnuncios[indice],
                                 onTapItem: () {
-                                  Navigator.push(
+                                  final user = FirebaseAuth.instance.currentUser; // Get current user
+                                  if(user != null){
+                                    Navigator.push(
                                     context,
                                     MaterialPageRoute<void>(
                                       builder: (BuildContext context) =>
@@ -246,9 +258,13 @@ class _AnunciosState extends State<Anuncios> {
                                       ),
                                     ),
                                   );
-                                  DetalhesAnuncio();
-                                },
-                                onPressedRemover: () {});
+                                  } else {
+            // User is logged out, show login required message or redirect
+            _showLoginRequiredDialog(context); // Replace with your logic
+          }
+                                }
+                                // onPressedRemover: () {}
+                                );
                           }),
                     );
                 }
@@ -270,6 +286,29 @@ class _AnunciosState extends State<Anuncios> {
           onPressed: () {
             Navigator.pushNamed(context, "/map");
           }), */
+    );
+  }
+  void _showLoginRequiredDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Precisa fazer o Login'),
+        content: const Text('Voce precisa logar para acessar os Detalhes do anuncio'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/login");
+            },
+            child: const Text('Login'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
     );
   }
 }

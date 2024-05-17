@@ -1,5 +1,3 @@
-
-
 // ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names
 
 import 'package:flutter/material.dart';
@@ -188,7 +186,7 @@ class _LoginState extends State<Login> {
                 ,const SizedBox(height: 25,),
                 GestureDetector(
                   child: const Text("Ir para anúncio",style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),onTap: (){
-                  Navigator.pushReplacementNamed(context, "/l");
+                  Navigator.pushNamedAndRemoveUntil(context,'/l', (route) => false);
                  },
                 ),
             Padding(

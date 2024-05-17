@@ -6,7 +6,6 @@ import 'package:vendass/views/login.dart';
 import 'package:vendass/firebase_options.dart';
 import 'package:vendass/views/map.dart';
 import 'package:vendass/views/meus_anuncios.dart';
-
 import 'package:vendass/views/novo_anuncio.dart';
 
 
@@ -25,20 +24,19 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MaterialApp(
+  runApp( MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "Pech   ",
-    home: const Anuncios(),
+    home:  const Anuncios(),
     theme: temaPadraox,
-    initialRoute: "/login",
+    // initialRoute: "/l",
     routes: {
       '/l': (context) =>const Anuncios(),
+      '/h': (context) => const Anuncios(),
       '/login': (context) => const Login(), //modificacao
       '/meus-anuncios': (context) => const MeusAnuncios(), //modificacao
       '/novo-anuncio': (context) => const NovoAnuncio(), //modificacao
-     // '/foto': (context) => const Foto(), //modificacao
-     // '/tela': (context) => Tela_imagem(),
-      '/detalhes-anuncio': (context) =>   DetalhesAnuncio(),
+      '/detalhes-anuncio': (context) => const  DetalhesAnuncio(),
        '/map': (context) =>  const Maps(),
     },
    /*  onGenerateRoute: RouteGeneration.generateRoute, */

@@ -1,19 +1,14 @@
-
-
-// ignore_for_file: must_be_immutable
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vendass/main.dart';
 import 'package:vendass/models/anuncio.dart';
 
 class DetalhesAnuncio extends StatefulWidget {
-    Anuncio? anuncio;
+ final   Anuncio? anuncio;
     
 
-DetalhesAnuncio({super.key, this.anuncio});
+const DetalhesAnuncio({super.key, this.anuncio});
   
 
   @override
@@ -37,12 +32,16 @@ class _DetalhesAnuncioState extends State<DetalhesAnuncio> {
     }).toList();
   
   }
-_ligarTelefone(String telefone)async{
-if(await canLaunchUrlString("tel: $telefone")){
-  await launchUrlString(telefone);
-}else {
- "Não pode fazer a ligação";
+
+void _whatsapp(String telefone)async{
+String url = "https://wa.me/${_anuncio?.telefone }?text=ola+tudo+bem";
+
+try {
+    await launchUrl(Uri.parse(url));
+} catch (e) {
+  throw 'Coul not lauch $url';
 }
+  
 }
   @override
   void initState() {
@@ -77,7 +76,7 @@ if(await canLaunchUrlString("tel: $telefone")){
                     ),
                     items: _getListaImagens(),
                   )),
-              Container(color: Colors.black26,
+              Container(color: Colors.white,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,13 +150,14 @@ if(await canLaunchUrlString("tel: $telefone")){
                   decoration: BoxDecoration(
                       color: temaPadrao.backgroundColor,
                       borderRadius: BorderRadius.circular(30)),
-                  child: const Text(
-                    "Ligar",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  child:  Text(
+                    "Whatsapp: ${_anuncio!.telefone}",
+
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 onTap: () {
-                  _ligarTelefone(_anuncio?.telefone);
+                  _whatsapp(_anuncio?.telefone);
                 },
               ))
         ],
