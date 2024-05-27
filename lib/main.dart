@@ -4,9 +4,10 @@ import 'package:vendass/views/anuncios.dart';
 import 'package:vendass/views/detalhes_anuncio.dart';
 import 'package:vendass/views/login.dart';
 import 'package:vendass/firebase_options.dart';
-import 'package:vendass/views/map.dart';
+
 import 'package:vendass/views/meus_anuncios.dart';
 import 'package:vendass/views/novo_anuncio.dart';
+import 'package:vendass/views/produtos.dart';
 
 
 
@@ -27,9 +28,9 @@ void main() async {
   runApp( MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "Pech   ",
-    home:  const Anuncios(),
+    home:  const Produtos(),
     theme: temaPadraox,
-    // initialRoute: "/l",
+    // initialRoute: "/produtos",
     routes: {
       '/l': (context) =>const Anuncios(),
       '/h': (context) => const Anuncios(),
@@ -37,7 +38,9 @@ void main() async {
       '/meus-anuncios': (context) => const MeusAnuncios(), //modificacao
       '/novo-anuncio': (context) => const NovoAnuncio(), //modificacao
       '/detalhes-anuncio': (context) => const  DetalhesAnuncio(),
-       '/map': (context) =>  const Maps(),
+      '/produtos': (context) => const  Produtos(),
+    
+      
     },
    /*  onGenerateRoute: RouteGeneration.generateRoute, */
   ));
